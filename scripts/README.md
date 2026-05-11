@@ -1,7 +1,22 @@
 # Scripts
 
-Implementation scripts will live here after the workflows and command interface
-are designed.
+Implementation scripts live here.
 
-The top-level interface will likely be a `Makefile`, while scripts contain the
-actual AWS and instance setup logic.
+The top-level user interface is the repo `Makefile`. Scripts contain the actual
+logic behind each command.
+
+Current structure:
+
+```text
+scripts/
+├── lib/
+│   ├── checks.sh
+│   ├── config.sh
+│   └── log.sh
+└── local/
+    ├── aws-login.sh
+    ├── aws-whoami.sh
+    ├── configure-aws-sso.sh
+    ├── doctor.sh
+    └── init-config.sh
+```

@@ -23,21 +23,42 @@ Resources are isolated with Owner=<username> tags.
 
 ## Current Status
 
-This repository is being designed documentation-first. We will draft workflow
-and command/API docs before implementing the scripts behind them.
+Loop 1 is complete: local machine setup.
+
+Implemented commands:
+
+```bash
+make help
+make init-config
+make doctor
+make configure-aws-sso
+make aws-login
+make aws-whoami
+```
+
+Start with:
+
+```text
+docs/prerequisites.md
+docs/local-machine-setup.md
+```
 
 ## Planned Structure
 
 ```text
 banglab-aws-tools/
 ├── README.md
+├── Makefile
+├── config.example.env
 ├── docs/
-│   ├── workflows.md
+│   ├── prerequisites.md
 │   ├── local-machine-setup.md
+│   ├── workflows.md
 │   ├── persistent-ebs.md
 │   ├── daily-ec2-workflow.md
 │   └── optional-tools.md
 └── scripts/
+    ├── lib/
     ├── local/
     ├── status/
     ├── ec2/

@@ -1,6 +1,8 @@
-# Docs
+# User Docs
 
-Design and workflow documentation for `banglab-aws-tools` lives here.
+User-facing documentation for `banglab-aws-tools` lives here.
 
-We draft docs before implementation so the user-facing workflow stays simple
-and reviewable.
+Start with:
+
+1. [Prerequisites](prerequisites.md)
+2. [Local Machine Setup](local-machine-setup.md)

@@ -1,0 +1,9 @@
+# Local user configuration
+config.env
+
+# Generated logs or temporary files
+*.log
+tmp/
+
+# macOS
+.DS_Store
