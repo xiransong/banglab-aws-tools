@@ -94,6 +94,61 @@ validate_loop2_config() {
   fi
 }
 
+validate_loop3_config() {
+  validate_loop2_config
+
+  if [[ ! "${DEFAULT_AVAILABILITY_ZONE:-}" =~ ^[a-z]{2}-[a-z]+-[0-9][a-z]$ ]]; then
+    die "DEFAULT_AVAILABILITY_ZONE should look like us-east-1a."
+  fi
+}
+
+validate_instance_name() {
+  require_config_vars INSTANCE_NAME
+
+  if [[ ! "${INSTANCE_NAME}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    die "INSTANCE_NAME should contain only letters, numbers, dots, underscores, and hyphens."
+  fi
+}
+
+validate_ssh_host() {
+  require_config_vars SSH_HOST
+
+  if [[ ! "${SSH_HOST}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    die "SSH_HOST should contain only letters, numbers, dots, underscores, and hyphens."
+  fi
+}
+
+load_instance_config() {
+  require_config_vars INSTANCE_CONFIG
+
+  if [[ ! -f "${INSTANCE_CONFIG}" ]]; then
+    die "INSTANCE_CONFIG not found: ${INSTANCE_CONFIG}"
+  fi
+
+  if [[ -n "${AMI_ID:-}" || -n "${INSTANCE_TYPE:-}" || -n "${ROOT_VOLUME_SIZE_GB:-}" ]]; then
+    die "AMI_ID, INSTANCE_TYPE, and ROOT_VOLUME_SIZE_GB must come from INSTANCE_CONFIG only."
+  fi
+
+  set -a
+  # shellcheck disable=SC1090
+  source "${INSTANCE_CONFIG}"
+  set +a
+
+  require_config_vars AMI_ID INSTANCE_TYPE ROOT_VOLUME_SIZE_GB
+
+  if [[ ! "${AMI_ID}" =~ ^ami-[A-Za-z0-9]+$ ]]; then
+    die "AMI_ID should look like ami-xxxxxxxx."
+  fi
+
+  if [[ ! "${INSTANCE_TYPE}" =~ ^[A-Za-z0-9][A-Za-z0-9.-]*$ ]]; then
+    die "INSTANCE_TYPE contains invalid characters."
+  fi
+
+  if [[ ! "${ROOT_VOLUME_SIZE_GB}" =~ ^[0-9]+$ ]]; then
+    die "ROOT_VOLUME_SIZE_GB must be a number."
+  fi
+}
+
 print_config_summary() {
   echo
   echo "Config summary (${CONFIG_FILE}):"

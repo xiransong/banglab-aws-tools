@@ -20,6 +20,15 @@ scripts/
 │   ├── configure-aws-sso.sh
 │   ├── doctor.sh
 │   └── init-config.sh
+├── ec2/
+│   ├── configure-ssh.sh
+│   ├── instance-status.sh
+│   ├── instances.sh
+│   ├── launch-instance.sh
+│   ├── reboot-instance.sh
+│   ├── start-instance.sh
+│   ├── stop-instance.sh
+│   └── terminate-instance.sh
 └── ssh/
     ├── add-ssh-rule.sh
     ├── create-key.sh

@@ -93,3 +93,101 @@ ensure_security_group_owned_by_user() {
     die "Security group ${SECURITY_GROUP_NAME} exists but is not tagged Owner=${OWNER}."
   fi
 }
+
+get_subnet_id_for_default_az() {
+  local vpc_id="$1"
+  local subnet_id
+
+  subnet_id="$(
+    aws_ec2 describe-subnets \
+      --filters \
+        "Name=vpc-id,Values=${vpc_id}" \
+        "Name=availability-zone,Values=${DEFAULT_AVAILABILITY_ZONE}" \
+      --query 'Subnets[0].SubnetId' \
+      --output text
+  )"
+
+  if [[ -z "${subnet_id}" || "${subnet_id}" == "None" ]]; then
+    return 1
+  fi
+
+  printf '%s\n' "${subnet_id}"
+}
+
+get_ami_root_device_name() {
+  local root_device
+
+  root_device="$(
+    aws_ec2 describe-images \
+      --image-ids "${AMI_ID}" \
+      --query 'Images[0].RootDeviceName' \
+      --output text
+  )"
+
+  if [[ -z "${root_device}" || "${root_device}" == "None" ]]; then
+    return 1
+  fi
+
+  printf '%s\n' "${root_device}"
+}
+
+get_owned_instances_json() {
+  aws_ec2 describe-instances \
+    --filters "Name=tag:Owner,Values=${OWNER}" \
+    --output json
+}
+
+get_named_active_instances_json() {
+  aws_ec2 describe-instances \
+    --filters \
+      "Name=tag:Owner,Values=${OWNER}" \
+      "Name=tag:Name,Values=${INSTANCE_NAME}" \
+      "Name=instance-state-name,Values=pending,running,stopping,stopped" \
+    --output json
+}
+
+get_named_active_instance_count() {
+  get_named_active_instances_json | jq '[.Reservations[].Instances[]?] | length'
+}
+
+get_named_active_instance_field() {
+  local field="$1"
+
+  get_named_active_instances_json | jq -r --arg field "${field}" '
+    [.Reservations[].Instances[]?][0][$field] // empty
+  '
+}
+
+resolve_named_active_instance_id() {
+  local count
+
+  count="$(get_named_active_instance_count)"
+
+  if [[ "${count}" == "0" ]]; then
+    die "No active instance found with Owner=${OWNER}, Name=${INSTANCE_NAME}."
+  fi
+
+  if [[ "${count}" != "1" ]]; then
+    die "Multiple active instances found with Owner=${OWNER}, Name=${INSTANCE_NAME}. Use a unique INSTANCE_NAME."
+  fi
+
+  get_named_active_instance_field InstanceId
+}
+
+get_instance_state() {
+  local instance_id="$1"
+
+  aws_ec2 describe-instances \
+    --instance-ids "${instance_id}" \
+    --query 'Reservations[0].Instances[0].State.Name' \
+    --output text
+}
+
+get_instance_public_ip() {
+  local instance_id="$1"
+
+  aws_ec2 describe-instances \
+    --instance-ids "${instance_id}" \
+    --query 'Reservations[0].Instances[0].PublicIpAddress' \
+    --output text | sed 's/^None$//'
+}

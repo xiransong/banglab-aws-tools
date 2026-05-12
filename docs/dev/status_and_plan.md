@@ -1,14 +1,14 @@
 # Status And Plan
 
-Last updated: 2026-05-11
+Last updated: 2026-05-12
 
 This file is the development cockpit for `banglab-aws-tools`. Read this first
 when returning to the repo.
 
 ## Current Repo Status
 
-The repo has completed Loop 1: Local Machine Setup and Loop 2: SSH Access
-Setup.
+The repo has completed Loop 1: Local Machine Setup, Loop 2: SSH Access Setup,
+and Loop 3: EC2 Instance Lifecycle.
 
 Current stable files:
 
@@ -18,14 +18,19 @@ Current stable files:
 - `docs/local-machine-setup.md`: local setup workflow for Loop 1
 - `docs/ssh-access-setup.md`: SSH key pair and security group workflow for
   Loop 2
+- `docs/ec2-instance-lifecycle.md`: EC2 launch, SSH config, status, and
+  lifecycle workflow for Loop 3
 - `scripts/README.md`: overview of implemented script structure
 - `docs/dev/README.md`: development rules and loop process
 - `docs/dev/status_and_plan.md`: this cockpit file
 
 Loop 1 local setup scripts have been implemented and verified. Loop 2 SSH key
 pair and security group setup scripts have also been implemented and verified
-with the `takishiina` test profile. The AWS `EC2-GPU-Operator` permission set
-now enforces owner tags for both key pairs and security groups.
+with the `takishiina` test profile. Loop 3 EC2 instance lifecycle design,
+user-facing docs, command/API docs, instance recipes, Make targets, and scripts
+have been implemented. All Loop 3 commands were verified with the `takishiina`
+test profile. The AWS `EC2-GPU-Operator` permission set now enforces owner tags
+for key pairs, security groups, and EC2 instance launch workflows.
 
 ## Active Loop
 
@@ -52,6 +57,7 @@ None
 ```text
 docs/dev/archive/20260511-1-local-machine-setup
 docs/dev/archive/20260511-2-ssh-access-setup
+docs/dev/archive/20260512-3-ec2-instance-lifecycle
 ```
 
 Completed loops:
@@ -59,6 +65,7 @@ Completed loops:
 ```text
 Loop 1: Local Machine Setup
 Loop 2: SSH Access Setup
+Loop 3: EC2 Instance Lifecycle
 ```
 
 Implemented commands:
@@ -75,6 +82,14 @@ make create-key
 make import-key
 make create-security-group
 make add-ssh-rule SSH_RULE_NAME=home
+make instances
+make launch-instance INSTANCE_NAME=dev INSTANCE_CONFIG=instances/m7i-flex-xlarge.env
+make instance-status INSTANCE_NAME=dev
+make configure-ssh INSTANCE_NAME=dev
+make stop-instance INSTANCE_NAME=dev
+make start-instance INSTANCE_NAME=dev
+make reboot-instance INSTANCE_NAME=dev
+make terminate-instance INSTANCE_NAME=dev CONFIRM_TERMINATE=dev
 ```
 
 ## Decisions So Far
@@ -105,6 +120,19 @@ make add-ssh-rule SSH_RULE_NAME=home
 - `EC2-GPU-Operator` authorizes `CreateSecurityGroup` against both the new
   security group and the target VPC, so the policy includes a VPC-side
   allowance for that action.
+- EC2 launch uses explicit instance recipe files under `instances/`.
+- Loop 3 includes two starter recipes: `m7i-flex.xlarge` and `g4dn.xlarge`,
+  both using AMI `ami-0252d9c82e6b8fa85` and a 200 GB root volume.
+- `make launch-instance` waits until the instance reaches `running`.
+- SSH may still need 30-60 seconds after EC2 reports `running`; users should
+  retry if the first SSH attempt says `Connection refused`.
+- `make configure-ssh` manages a marked `~/.ssh/config` block and defaults to
+  `SSH_HOST=ec2`.
+- `make instances` uses compact per-instance blocks rather than a wide table.
+- `make start-instance` tolerates a brief stale `stopped` state after AWS
+  accepts the start request.
+- `EC2-GPU-Operator` `RunInstances` permissions must be split across created
+  resources, owned launch dependencies, and untagged launch dependencies.
 
 ## Planned Workflow Areas
 
@@ -118,8 +146,8 @@ make add-ssh-rule SSH_RULE_NAME=home
 
 ## Short-Term Plan
 
-1. Choose Loop 3.
-2. Draft Loop 3 design in `docs/dev/loop/design.md`.
+1. Choose Loop 4.
+2. Draft Loop 4 design in `docs/dev/loop/design.md`.
 3. Draft command/API docs before implementation.
 
 Loop 1 was tested with:
@@ -140,13 +168,23 @@ Security group: takishiina-ssh (sg-0970ff24473e84a81)
 SSH rule: 142.120.164.249/32, takishiina-home
 ```
 
+Loop 3 was tested with the same profile. The successful AWS resources were:
+
+```text
+Instance name: dev
+Instance ID: i-0a2d33a07be6c6cf0
+Instance type: m7i-flex.xlarge
+Public IP: 44.202.207.72
+SSH host: ec2
+```
+
 ## Next Concrete Step
 
 Choose the next loop. Good candidates:
 
 ```text
-EC2 instance status checks
-Instance type selection
-Launch/stop/terminate workflow
 Persistent EBS setup
+Remote machine setup: GitHub, micromamba, Node.js, Codex
+Status checks for EBS volumes and storage costs
+Cleanup and safety workflows
 ```

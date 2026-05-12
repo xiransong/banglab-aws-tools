@@ -7,3 +7,4 @@ Start with:
 1. [Prerequisites](prerequisites.md)
 2. [Local Machine Setup](local-machine-setup.md)
 3. [SSH Access Setup](ssh-access-setup.md)
+4. [EC2 Instance Lifecycle](ec2-instance-lifecycle.md)
