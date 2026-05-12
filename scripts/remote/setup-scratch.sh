@@ -8,6 +8,7 @@ source "${SCRIPT_DIR}/scratch-common.sh"
 
 validate_remote_volume_id
 resolve_ebs_device_by_volume_id
+ensure_device_safe_for_setup
 
 fstype="$(get_device_fstype)"
 

@@ -8,7 +8,7 @@ when returning to the repo.
 ## Current Repo Status
 
 The repo has completed Loop 1: Local Machine Setup, Loop 2: SSH Access Setup,
-and Loop 3: EC2 Instance Lifecycle.
+Loop 3: EC2 Instance Lifecycle, and Loop 4: Persistent EBS Management.
 
 Current stable files:
 
@@ -20,6 +20,7 @@ Current stable files:
   Loop 2
 - `docs/ec2-instance-lifecycle.md`: EC2 launch, SSH config, status, and
   lifecycle workflow for Loop 3
+- `docs/persistent-ebs.md`: persistent scratch EBS workflow for Loop 4
 - `scripts/README.md`: overview of implemented script structure
 - `docs/dev/README.md`: development rules and loop process
 - `docs/dev/status_and_plan.md`: this cockpit file
@@ -30,31 +31,29 @@ with the `takishiina` test profile. Loop 3 EC2 instance lifecycle design,
 user-facing docs, command/API docs, instance recipes, Make targets, and scripts
 have been implemented. All Loop 3 commands were verified with the `takishiina`
 test profile. Loop 4 Persistent EBS Management design, user-facing docs,
-command/API docs, Make targets, and scripts have been drafted/implemented. The
-AWS `EC2-GPU-Operator` permission set now enforces owner tags for key pairs,
-security groups, and EC2 instance launch workflows.
+command/API docs, Make targets, and scripts have been implemented and verified
+with the `takishiina` test profile. The AWS `EC2-GPU-Operator` permission set
+now enforces owner tags for key pairs, security groups, EC2 instance launch
+workflows, and persistent EBS workflows.
 
 ## Active Loop
 
 Active loop:
 
 ```text
-Loop 4: Persistent EBS Management
+None
 ```
 
 Current state:
 
 ```text
-Implemented; awaiting manual AWS and inside-instance verification
+No active loop. Ready to choose the next workflow area.
 ```
 
 Active loop docs:
 
 ```text
-docs/dev/loop/design.md
-docs/dev/loop/api.md
-docs/dev/loop/implementation_log.md
-docs/dev/loop/review_checklist.md
+None
 ```
 
 ## Completed Loops
@@ -63,6 +62,7 @@ docs/dev/loop/review_checklist.md
 docs/dev/archive/20260511-1-local-machine-setup
 docs/dev/archive/20260511-2-ssh-access-setup
 docs/dev/archive/20260512-3-ec2-instance-lifecycle
+docs/dev/archive/20260512-4-persistent-ebs-management
 ```
 
 Completed loops:
@@ -71,6 +71,7 @@ Completed loops:
 Loop 1: Local Machine Setup
 Loop 2: SSH Access Setup
 Loop 3: EC2 Instance Lifecycle
+Loop 4: Persistent EBS Management
 ```
 
 Implemented commands:
@@ -95,6 +96,11 @@ make stop-instance INSTANCE_NAME=dev
 make start-instance INSTANCE_NAME=dev
 make reboot-instance INSTANCE_NAME=dev
 make terminate-instance INSTANCE_NAME=dev CONFIRM_TERMINATE=dev
+make volumes
+make create-volume VOLUME_NAME=scratch VOLUME_SIZE_GB=500
+make attach-volume VOLUME_ID=vol-... INSTANCE_NAME=dev
+make setup-scratch VOLUME_ID=vol-... CONFIRM_SETUP_SCRATCH=YES
+make mount-scratch VOLUME_ID=vol-...
 ```
 
 ## Decisions So Far
@@ -143,6 +149,16 @@ make terminate-instance INSTANCE_NAME=dev CONFIRM_TERMINATE=dev
   accepts the start request.
 - `EC2-GPU-Operator` `RunInstances` permissions must be split across created
   resources, owned launch dependencies, and untagged launch dependencies.
+- Loop 4 treats the persistent EBS `VOLUME_ID` as the source of truth for
+  attach, setup, and mount.
+- `setup-scratch` is a one-time inside-instance command for blank scratch
+  volumes and requires `CONFIRM_SETUP_SCRATCH=YES`.
+- `mount-scratch` is the daily inside-instance command for an initialized
+  persistent scratch volume.
+- inside-instance scratch scripts resolve EBS devices through
+  `/dev/disk/by-id` using the EBS volume ID without dashes.
+- inside-instance scratch scripts reject devices with partitions or mounted
+  children, which helps catch accidentally passing the root EBS volume ID.
 
 ## Planned Workflow Areas
 
@@ -156,9 +172,9 @@ make terminate-instance INSTANCE_NAME=dev CONFIRM_TERMINATE=dev
 
 ## Short-Term Plan
 
-1. Review Loop 4 implementation.
-2. Manually verify local EBS AWS commands with the `takishiina` profile.
-3. Manually verify inside-instance scratch setup/mount.
+1. Choose the next workflow loop.
+2. Draft design docs in `docs/dev/loop/` before implementation.
+3. Keep user-facing docs and command/API docs in sync.
 
 Loop 1 was tested with:
 
@@ -188,17 +204,21 @@ Public IP: 44.202.207.72
 SSH host: ec2
 ```
 
-## Next Concrete Step
-
-Review and manually verify Loop 4:
+Loop 4 was tested with the same profile. The successful persistent scratch
+volume was:
 
 ```text
-docs/dev/loop/design.md
-docs/dev/loop/api.md
-docs/persistent-ebs.md
-make volumes
-make create-volume VOLUME_NAME=scratch VOLUME_SIZE_GB=500
-make attach-volume VOLUME_ID=vol-... INSTANCE_NAME=dev
-make setup-scratch VOLUME_ID=vol-... CONFIRM_SETUP_SCRATCH=YES
-make mount-scratch VOLUME_ID=vol-...
+Persistent scratch volume ID: vol-0cf90104842e28cd1
+Mount point: ~/scratch
+```
+
+## Next Concrete Step
+
+Choose the next loop. Good candidates:
+
+```text
+Remote machine setup: GitHub, micromamba, Node.js, Codex
+Status dashboards for EC2 instances, EBS volumes, and storage costs
+Cleanup and safety workflows
+S3 or data transfer workflows
 ```

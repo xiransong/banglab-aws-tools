@@ -179,6 +179,8 @@ Expected behavior:
 - validates `VOLUME_ID`
 - resolves the Linux block device from `VOLUME_ID`
 - refuses if no device is found
+- refuses if the resolved disk has partitions or mounted children, which helps
+  catch accidentally passing the root EBS volume ID
 - refuses if the device already has a filesystem
 - prints a dry-run summary:
   - volume ID
@@ -215,6 +217,8 @@ Expected behavior:
 - validates `VOLUME_ID`
 - resolves the Linux block device from `VOLUME_ID`
 - refuses if no device is found
+- refuses with a root-volume hint if the whole disk has no filesystem but has
+  partitions or mounted children
 - refuses if the device has no filesystem
 - creates `~/scratch`
 - mounts the filesystem at `~/scratch`

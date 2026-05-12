@@ -12,7 +12,7 @@ resolve_ebs_device_by_volume_id
 fstype="$(get_device_fstype)"
 
 if [[ -z "${fstype}" ]]; then
-  die "Device ${REAL_DEVICE} has no filesystem. Run setup-scratch first if this is a new blank volume."
+  explain_empty_fstype_for_mount
 fi
 
 sudo mkdir -p "${SCRATCH_MOUNT}"

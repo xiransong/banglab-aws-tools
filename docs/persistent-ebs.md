@@ -188,6 +188,11 @@ cd ~/scratch
 `mount-scratch` should not format anything. It mounts an already initialized
 volume at `~/scratch`.
 
+If you accidentally pass the root EBS volume ID, `mount-scratch` should refuse
+with an error saying that the device has partitions or mounted children. Go back
+to your local laptop and run `make volumes`; choose the persistent scratch
+volume ID, not the root volume attached to the EC2 instance.
+
 ## Daily Workflow
 
 From your local laptop:

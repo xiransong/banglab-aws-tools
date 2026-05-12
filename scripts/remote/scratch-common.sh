@@ -52,8 +52,42 @@ get_device_fstype() {
   lsblk -no FSTYPE "${REAL_DEVICE}" | head -n 1
 }
 
+get_device_child_count() {
+  lsblk -nr -o NAME "${REAL_DEVICE}" | sed '1d' | wc -l | tr -d ' '
+}
+
+get_device_tree_mounts() {
+  lsblk -nr -o MOUNTPOINTS "${REAL_DEVICE}" | sed '/^$/d' || true
+}
+
 get_device_uuid() {
   sudo blkid -s UUID -o value "${REAL_DEVICE}"
+}
+
+ensure_device_safe_for_setup() {
+  local child_count
+  local mounts
+
+  child_count="$(get_device_child_count)"
+  mounts="$(get_device_tree_mounts)"
+
+  if [[ "${child_count}" != "0" || -n "${mounts}" ]]; then
+    die "Device ${REAL_DEVICE} has partitions or mounted children. Refusing to use it as a new scratch disk. Did you pass the root EBS volume ID? Use 'make volumes' on your laptop and choose the persistent scratch VolumeId."
+  fi
+}
+
+explain_empty_fstype_for_mount() {
+  local child_count
+  local mounts
+
+  child_count="$(get_device_child_count)"
+  mounts="$(get_device_tree_mounts)"
+
+  if [[ "${child_count}" != "0" || -n "${mounts}" ]]; then
+    die "Device ${REAL_DEVICE} has no filesystem on the whole disk, but it has partitions or mounted children. This is probably not the scratch volume; did you pass the root EBS volume ID?"
+  fi
+
+  die "Device ${REAL_DEVICE} has no filesystem. Run setup-scratch first if this is a new blank scratch volume."
 }
 
 ensure_fstab_entry() {

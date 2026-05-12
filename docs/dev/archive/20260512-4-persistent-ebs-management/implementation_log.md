@@ -39,6 +39,8 @@ Implementation notes:
 - inside-instance scripts do not call AWS APIs.
 - inside-instance scripts resolve the real device through `/dev/disk/by-id`
   using the EBS volume ID without dashes.
+- inside-instance scripts refuse devices with partitions or mounted children,
+  which catches accidentally passing the root EBS volume ID.
 - `setup-scratch` refuses to format an existing filesystem and requires
   `CONFIRM_SETUP_SCRATCH=YES`.
 - `mount-scratch` refuses to format anything.
@@ -53,10 +55,20 @@ Verification run by Codex:
 - local failure path for missing `VOLUME_NAME` in `create-volume`: passed
 - local failure path for missing `VOLUME_ID` in `attach-volume`: passed
 - local failure path for `VOLUME_SIZE_GB=0` in `create-volume`: passed
+- manual workflow caught accidental root EBS volume ID use; inside-instance
+  safety checks were tightened to reject partitioned or mounted device trees.
 
 Not run by Codex:
 
 - AWS-touching Loop 4 commands
 - any command that formats or mounts a disk
 
-These should be verified manually with the `takishiina` test profile.
+Manual verification run by Xiran with the `takishiina` test profile:
+
+- local EBS commands and workflow: passed
+- inside-instance `setup-scratch`: passed
+- inside-instance daily `mount-scratch`: passed with persistent scratch volume
+  `vol-0cf90104842e28cd1`
+- accidental root EBS volume ID copy was observed during testing; the scripts
+  were tightened afterward to reject partitioned or mounted device trees with a
+  clearer error
