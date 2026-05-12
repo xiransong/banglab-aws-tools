@@ -29,27 +29,32 @@ pair and security group setup scripts have also been implemented and verified
 with the `takishiina` test profile. Loop 3 EC2 instance lifecycle design,
 user-facing docs, command/API docs, instance recipes, Make targets, and scripts
 have been implemented. All Loop 3 commands were verified with the `takishiina`
-test profile. The AWS `EC2-GPU-Operator` permission set now enforces owner tags
-for key pairs, security groups, and EC2 instance launch workflows.
+test profile. Loop 4 Persistent EBS Management design, user-facing docs,
+command/API docs, Make targets, and scripts have been drafted/implemented. The
+AWS `EC2-GPU-Operator` permission set now enforces owner tags for key pairs,
+security groups, and EC2 instance launch workflows.
 
 ## Active Loop
 
 Active loop:
 
 ```text
-None
+Loop 4: Persistent EBS Management
 ```
 
 Current state:
 
 ```text
-No active loop. Ready to choose the next workflow area.
+Implemented; awaiting manual AWS and inside-instance verification
 ```
 
 Active loop docs:
 
 ```text
-None
+docs/dev/loop/design.md
+docs/dev/loop/api.md
+docs/dev/loop/implementation_log.md
+docs/dev/loop/review_checklist.md
 ```
 
 ## Completed Loops
@@ -106,6 +111,11 @@ make terminate-instance INSTANCE_NAME=dev CONFIRM_TERMINATE=dev
   select `EC2-GPU-Operator`.
 - `AWS_ACCOUNT_LABEL` is required in local config so users can identify the AWS
   account context used by their SSO profile.
+- `AWS_SSO_SESSION` should be unique per AWS user on the same laptop, for
+  example `banglab-takishiina`. Otherwise AWS CLI can reuse an SSO token from a
+  different local profile.
+- `make aws-whoami` checks that the STS account, role, and final assumed-role
+  session name match `config.env`.
 - `jq` is required as a standard local CLI dependency.
 - `make doctor` should stay simple in Loop 1: check local config and tools, but
   do not log in or call AWS identity APIs.
@@ -146,9 +156,9 @@ make terminate-instance INSTANCE_NAME=dev CONFIRM_TERMINATE=dev
 
 ## Short-Term Plan
 
-1. Choose Loop 4.
-2. Draft Loop 4 design in `docs/dev/loop/design.md`.
-3. Draft command/API docs before implementation.
+1. Review Loop 4 implementation.
+2. Manually verify local EBS AWS commands with the `takishiina` profile.
+3. Manually verify inside-instance scratch setup/mount.
 
 Loop 1 was tested with:
 
@@ -180,11 +190,15 @@ SSH host: ec2
 
 ## Next Concrete Step
 
-Choose the next loop. Good candidates:
+Review and manually verify Loop 4:
 
 ```text
-Persistent EBS setup
-Remote machine setup: GitHub, micromamba, Node.js, Codex
-Status checks for EBS volumes and storage costs
-Cleanup and safety workflows
+docs/dev/loop/design.md
+docs/dev/loop/api.md
+docs/persistent-ebs.md
+make volumes
+make create-volume VOLUME_NAME=scratch VOLUME_SIZE_GB=500
+make attach-volume VOLUME_ID=vol-... INSTANCE_NAME=dev
+make setup-scratch VOLUME_ID=vol-... CONFIRM_SETUP_SCRATCH=YES
+make mount-scratch VOLUME_ID=vol-...
 ```

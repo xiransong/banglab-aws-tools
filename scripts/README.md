@@ -29,6 +29,14 @@ scripts/
 │   ├── start-instance.sh
 │   ├── stop-instance.sh
 │   └── terminate-instance.sh
+├── ebs/
+│   ├── attach-volume.sh
+│   ├── create-volume.sh
+│   └── volumes.sh
+├── remote/
+│   ├── mount-scratch.sh
+│   ├── scratch-common.sh
+│   └── setup-scratch.sh
 └── ssh/
     ├── add-ssh-rule.sh
     ├── create-key.sh

@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: help init-config doctor configure-aws-sso aws-login aws-whoami ssh-status create-key import-key create-security-group add-ssh-rule instances launch-instance instance-status configure-ssh stop-instance start-instance reboot-instance terminate-instance
+.PHONY: help init-config doctor configure-aws-sso aws-login aws-whoami ssh-status create-key import-key create-security-group add-ssh-rule instances launch-instance instance-status configure-ssh stop-instance start-instance reboot-instance terminate-instance volumes create-volume attach-volume setup-scratch mount-scratch
 
 help: ## Show available commands
 	@awk 'BEGIN {FS = ":.*## "}; /^[a-zA-Z0-9_-]+:.*## / {printf "%-26s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -58,3 +58,18 @@ reboot-instance: ## Reboot a running EC2 instance, e.g. make reboot-instance INS
 
 terminate-instance: ## Terminate an EC2 instance, e.g. make terminate-instance INSTANCE_NAME=dev CONFIRM_TERMINATE=dev
 	@INSTANCE_NAME="$(INSTANCE_NAME)" CONFIRM_TERMINATE="$(CONFIRM_TERMINATE)" bash scripts/ec2/terminate-instance.sh
+
+volumes: ## List EBS volumes owned by the configured user
+	@bash scripts/ebs/volumes.sh
+
+create-volume: ## Create a persistent EBS volume, e.g. make create-volume VOLUME_NAME=scratch VOLUME_SIZE_GB=500
+	@VOLUME_NAME="$(VOLUME_NAME)" VOLUME_SIZE_GB="$(VOLUME_SIZE_GB)" bash scripts/ebs/create-volume.sh
+
+attach-volume: ## Attach a persistent EBS volume, e.g. make attach-volume VOLUME_ID=vol-... INSTANCE_NAME=dev
+	@VOLUME_ID="$(VOLUME_ID)" INSTANCE_NAME="$(INSTANCE_NAME)" bash scripts/ebs/attach-volume.sh
+
+setup-scratch: ## Inside EC2: format and mount a new scratch EBS volume
+	@VOLUME_ID="$(VOLUME_ID)" CONFIRM_SETUP_SCRATCH="$(CONFIRM_SETUP_SCRATCH)" bash scripts/remote/setup-scratch.sh
+
+mount-scratch: ## Inside EC2: mount an initialized scratch EBS volume
+	@VOLUME_ID="$(VOLUME_ID)" bash scripts/remote/mount-scratch.sh

@@ -39,8 +39,10 @@ echo "  OWNER"
 echo "  AWS_PROFILE"
 echo "  AWS_ACCOUNT_LABEL"
 echo "  AWS_ACCOUNT_ID"
+echo "  AWS_SSO_SESSION"
 echo
 echo "For a new user, OWNER and AWS_PROFILE are usually the same username."
+echo "AWS_SSO_SESSION is usually banglab-\${OWNER}."
 echo "You can copy AWS_ACCOUNT_ID from the AWS Access Portal."
 echo "========================================"
 echo

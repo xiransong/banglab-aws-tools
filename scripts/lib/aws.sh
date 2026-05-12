@@ -191,3 +191,51 @@ get_instance_public_ip() {
     --query 'Reservations[0].Instances[0].PublicIpAddress' \
     --output text | sed 's/^None$//'
 }
+
+get_owned_volumes_json() {
+  aws_ec2 describe-volumes \
+    --filters "Name=tag:Owner,Values=${OWNER}" \
+    --output json
+}
+
+get_named_volumes_json() {
+  aws_ec2 describe-volumes \
+    --filters \
+      "Name=tag:Owner,Values=${OWNER}" \
+      "Name=tag:Name,Values=${VOLUME_NAME}" \
+    --output json
+}
+
+get_named_volume_count() {
+  get_named_volumes_json | jq '[.Volumes[]?] | length'
+}
+
+get_volume_json_by_id() {
+  aws_ec2 describe-volumes \
+    --volume-ids "${VOLUME_ID}" \
+    --output json
+}
+
+get_volume_field() {
+  local field="$1"
+
+  get_volume_json_by_id | jq -r --arg field "${field}" '.Volumes[0][$field] // empty'
+}
+
+get_volume_owner() {
+  get_volume_json_by_id | jq -r '.Volumes[0].Tags[]? | select(.Key == "Owner") | .Value' | head -n 1
+}
+
+ensure_volume_owned_by_user() {
+  local owner
+
+  owner="$(get_volume_owner)"
+
+  if [[ "${owner}" != "${OWNER}" ]]; then
+    die "Volume ${VOLUME_ID} exists but is not tagged Owner=${OWNER}."
+  fi
+}
+
+get_volume_attachment_state() {
+  get_volume_json_by_id | jq -r '.Volumes[0].Attachments[0].State // empty'
+}

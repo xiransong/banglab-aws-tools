@@ -37,6 +37,7 @@ OWNER=takishiina
 AWS_PROFILE=takishiina
 AWS_ACCOUNT_LABEL=xiransong
 AWS_ACCOUNT_ID=777712053059
+AWS_SSO_SESSION=banglab-takishiina
 ```
 
 For Taki Shiina, `OWNER` is `takishiina`. She is testing in the `xiransong`
@@ -49,7 +50,6 @@ AWS_REGION=us-east-1
 AWS_SSO_START_URL=https://banglab-udem-mila.awsapps.com/start
 AWS_SSO_REGION=us-east-1
 AWS_SSO_ROLE_NAME=EC2-GPU-Operator
-AWS_SSO_SESSION=banglab
 DEFAULT_AVAILABILITY_ZONE=us-east-1a
 ```
 
@@ -61,10 +61,10 @@ AWS_PROFILE=takishiina
 AWS_REGION=us-east-1
 AWS_ACCOUNT_LABEL=xiransong
 AWS_ACCOUNT_ID=777712053059
+AWS_SSO_SESSION=banglab-takishiina
 AWS_SSO_START_URL=https://banglab-udem-mila.awsapps.com/start
 AWS_SSO_REGION=us-east-1
 AWS_SSO_ROLE_NAME=EC2-GPU-Operator
-AWS_SSO_SESSION=banglab
 DEFAULT_AVAILABILITY_ZONE=us-east-1a
 ```
 
@@ -75,6 +75,8 @@ Important:
 - `AWS_ACCOUNT_LABEL` is a human-readable account label.
 - `AWS_ACCOUNT_ID` is the 12-digit AWS account ID copied from AWS Access
   Portal.
+- `AWS_SSO_SESSION` is the local AWS CLI SSO cache name. Use a different value
+  for each AWS user on the same laptop, such as `banglab-takishiina`.
 
 ## Step 3: Check Local Readiness
 
@@ -112,13 +114,13 @@ The generated profile should look like:
 
 ```ini
 [profile takishiina]
-sso_session = banglab
+sso_session = banglab-takishiina
 sso_account_id = 777712053059
 sso_role_name = EC2-GPU-Operator
 region = us-east-1
 output = json
 
-[sso-session banglab]
+[sso-session banglab-takishiina]
 sso_start_url = https://banglab-udem-mila.awsapps.com/start
 sso_region = us-east-1
 sso_registration_scopes = sso:account:access
@@ -136,6 +138,18 @@ make aws-login
 
 A browser window should open. Log in through the BangLab AWS Access Portal and
 complete MFA if prompted.
+
+If you use multiple AWS users on the same laptop, make sure the browser is
+logged in as the same person as `OWNER`. If AWS CLI keeps reusing the wrong
+identity, run:
+
+```bash
+aws sso logout
+make aws-login
+```
+
+You may also need to sign out of the AWS Access Portal in the browser, then log
+in again as the intended user.
 
 ## Step 6: Verify AWS CLI Identity
 
@@ -170,6 +184,10 @@ Check that:
 - `Account` matches the AWS account ID in `config.env`
 - `Arn` contains `EC2-GPU-Operator`
 - `Arn` ends with your username
+
+`make aws-whoami` fails if the account, role, or final username in the ARN does
+not match `config.env`. This catches a common multi-user laptop mistake: using a
+profile named for one user while AWS CLI is still logged in as another user.
 
 ## What This Setup Does Not Do
 

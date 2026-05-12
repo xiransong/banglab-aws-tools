@@ -102,6 +102,10 @@ validate_loop3_config() {
   fi
 }
 
+validate_loop4_config() {
+  validate_loop3_config
+}
+
 validate_instance_name() {
   require_config_vars INSTANCE_NAME
 
@@ -115,6 +119,34 @@ validate_ssh_host() {
 
   if [[ ! "${SSH_HOST}" =~ ^[A-Za-z0-9._-]+$ ]]; then
     die "SSH_HOST should contain only letters, numbers, dots, underscores, and hyphens."
+  fi
+}
+
+validate_volume_name() {
+  require_config_vars VOLUME_NAME
+
+  if [[ ! "${VOLUME_NAME}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    die "VOLUME_NAME should contain only letters, numbers, dots, underscores, and hyphens."
+  fi
+}
+
+validate_volume_id() {
+  require_config_vars VOLUME_ID
+
+  if [[ ! "${VOLUME_ID}" =~ ^vol-[A-Za-z0-9]+$ ]]; then
+    die "VOLUME_ID should look like vol-xxxxxxxx."
+  fi
+}
+
+validate_volume_size_gb() {
+  require_config_vars VOLUME_SIZE_GB
+
+  if [[ ! "${VOLUME_SIZE_GB}" =~ ^[0-9]+$ ]]; then
+    die "VOLUME_SIZE_GB must be a number."
+  fi
+
+  if [[ "${VOLUME_SIZE_GB}" -lt 1 ]]; then
+    die "VOLUME_SIZE_GB must be at least 1."
   fi
 }
 
@@ -158,13 +190,13 @@ print_config_summary() {
   printf '  AWS_PROFILE=%s\n' "${AWS_PROFILE:-<unset>}"
   printf '  AWS_ACCOUNT_LABEL=%s\n' "${AWS_ACCOUNT_LABEL:-<unset>}"
   printf '  AWS_ACCOUNT_ID=%s\n' "${AWS_ACCOUNT_ID:-<unset>}"
+  printf '  AWS_SSO_SESSION=%s\n' "${AWS_SSO_SESSION:-<unset>}"
   echo
   echo "BangLab defaults:"
   printf '  AWS_REGION=%s\n' "${AWS_REGION:-<unset>}"
   printf '  AWS_SSO_START_URL=%s\n' "${AWS_SSO_START_URL:-<unset>}"
   printf '  AWS_SSO_REGION=%s\n' "${AWS_SSO_REGION:-<unset>}"
   printf '  AWS_SSO_ROLE_NAME=%s\n' "${AWS_SSO_ROLE_NAME:-<unset>}"
-  printf '  AWS_SSO_SESSION=%s\n' "${AWS_SSO_SESSION:-<unset>}"
   printf '  DEFAULT_AVAILABILITY_ZONE=%s\n' "${DEFAULT_AVAILABILITY_ZONE:-<unset>}"
   echo
   echo "SSH access defaults:"
