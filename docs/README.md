@@ -6,3 +6,4 @@ Start with:
 
 1. [Prerequisites](prerequisites.md)
 2. [Local Machine Setup](local-machine-setup.md)
+3. [SSH Access Setup](ssh-access-setup.md)

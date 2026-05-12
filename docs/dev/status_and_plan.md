@@ -7,7 +7,8 @@ when returning to the repo.
 
 ## Current Repo Status
 
-The repo has completed Loop 1: Local Machine Setup.
+The repo has completed Loop 1: Local Machine Setup and Loop 2: SSH Access
+Setup.
 
 Current stable files:
 
@@ -15,27 +16,49 @@ Current stable files:
 - `docs/README.md`: user-facing docs index
 - `docs/prerequisites.md`: prerequisite checklist for using the toolbox
 - `docs/local-machine-setup.md`: local setup workflow for Loop 1
+- `docs/ssh-access-setup.md`: SSH key pair and security group workflow for
+  Loop 2
 - `scripts/README.md`: overview of implemented script structure
 - `docs/dev/README.md`: development rules and loop process
 - `docs/dev/status_and_plan.md`: this cockpit file
 
-Loop 1 local setup scripts have been implemented and verified. AWS resource
-workflow scripts have not been implemented yet.
+Loop 1 local setup scripts have been implemented and verified. Loop 2 SSH key
+pair and security group setup scripts have also been implemented and verified
+with the `takishiina` test profile. The AWS `EC2-GPU-Operator` permission set
+now enforces owner tags for both key pairs and security groups.
 
 ## Active Loop
 
-There is currently no active loop.
+Active loop:
+
+```text
+None
+```
+
+Current state:
+
+```text
+No active loop. Ready to choose the next workflow area.
+```
+
+Active loop docs:
+
+```text
+None
+```
 
 ## Completed Loops
 
 ```text
 docs/dev/archive/20260511-1-local-machine-setup
+docs/dev/archive/20260511-2-ssh-access-setup
 ```
 
-Completed Loop 1:
+Completed loops:
 
 ```text
-Local Machine Setup
+Loop 1: Local Machine Setup
+Loop 2: SSH Access Setup
 ```
 
 Implemented commands:
@@ -47,6 +70,11 @@ make doctor
 make configure-aws-sso
 make aws-login
 make aws-whoami
+make ssh-status
+make create-key
+make import-key
+make create-security-group
+make add-ssh-rule SSH_RULE_NAME=home
 ```
 
 ## Decisions So Far
@@ -69,6 +97,14 @@ make aws-whoami
 - Persistent EBS should be mounted at `~/scratch`, not directly at `~/`.
 - The repo should be an easy-to-use toolbox for research workflows, likely with
   a `Makefile` as the main command interface.
+- SSH access setup uses local ed25519 keys at `SSH_KEY_PATH`, AWS key pairs
+  named `<OWNER>-key`, and security groups named `<OWNER>-ssh`.
+- SSH inbound rules are named by location with descriptions such as
+  `<OWNER>-home`.
+- Loop 2 uses the default VPC. Custom VPC support is future work.
+- `EC2-GPU-Operator` authorizes `CreateSecurityGroup` against both the new
+  security group and the target VPC, so the policy includes a VPC-side
+  allowance for that action.
 
 ## Planned Workflow Areas
 
@@ -82,12 +118,9 @@ make aws-whoami
 
 ## Short-Term Plan
 
-1. Keep Loop 1 stable unless a user-facing issue appears.
-2. Choose the next active loop.
-3. Likely next loop candidates:
-   - status checks for EC2 instances and EBS volumes
-   - SSH key pair and security group setup
-   - persistent EBS creation
+1. Choose Loop 3.
+2. Draft Loop 3 design in `docs/dev/loop/design.md`.
+3. Draft command/API docs before implementation.
 
 Loop 1 was tested with:
 
@@ -99,10 +132,21 @@ AWS account: xiransong
 AWS account ID: 777712053059
 ```
 
-## Next Concrete Step
-
-Start the next loop by creating:
+Loop 2 was tested with the same profile. The successful AWS resources were:
 
 ```text
-docs/dev/loop/design.md
+AWS key pair: takishiina-key
+Security group: takishiina-ssh (sg-0970ff24473e84a81)
+SSH rule: 142.120.164.249/32, takishiina-home
+```
+
+## Next Concrete Step
+
+Choose the next loop. Good candidates:
+
+```text
+EC2 instance status checks
+Instance type selection
+Launch/stop/terminate workflow
+Persistent EBS setup
 ```

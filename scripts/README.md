@@ -12,11 +12,18 @@ scripts/
 ├── lib/
 │   ├── checks.sh
 │   ├── config.sh
+│   ├── aws.sh
 │   └── log.sh
-└── local/
-    ├── aws-login.sh
-    ├── aws-whoami.sh
-    ├── configure-aws-sso.sh
-    ├── doctor.sh
-    └── init-config.sh
+├── local/
+│   ├── aws-login.sh
+│   ├── aws-whoami.sh
+│   ├── configure-aws-sso.sh
+│   ├── doctor.sh
+│   └── init-config.sh
+└── ssh/
+    ├── add-ssh-rule.sh
+    ├── create-key.sh
+    ├── create-security-group.sh
+    ├── import-key.sh
+    └── ssh-status.sh
 ```

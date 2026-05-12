@@ -16,6 +16,15 @@ load_config() {
   # shellcheck disable=SC1090
   source "${CONFIG_FILE}"
   set +a
+
+  apply_config_defaults
+}
+
+apply_config_defaults() {
+  SSH_KEY_PATH="${SSH_KEY_PATH:-${HOME}/.ssh/${OWNER:-}}"
+  KEY_NAME="${KEY_NAME:-${OWNER:-}-key}"
+  SECURITY_GROUP_NAME="${SECURITY_GROUP_NAME:-${OWNER:-}-ssh}"
+  SSH_PORT="${SSH_PORT:-22}"
 }
 
 require_config_vars() {
@@ -72,6 +81,19 @@ validate_loop1_config() {
   fi
 }
 
+validate_loop2_config() {
+  validate_loop1_config
+  require_config_vars \
+    SSH_KEY_PATH \
+    KEY_NAME \
+    SECURITY_GROUP_NAME \
+    SSH_PORT
+
+  if [[ ! "${SSH_PORT}" =~ ^[0-9]+$ ]]; then
+    die "SSH_PORT must be a number."
+  fi
+}
+
 print_config_summary() {
   echo
   echo "Config summary (${CONFIG_FILE}):"
@@ -89,4 +111,10 @@ print_config_summary() {
   printf '  AWS_SSO_ROLE_NAME=%s\n' "${AWS_SSO_ROLE_NAME:-<unset>}"
   printf '  AWS_SSO_SESSION=%s\n' "${AWS_SSO_SESSION:-<unset>}"
   printf '  DEFAULT_AVAILABILITY_ZONE=%s\n' "${DEFAULT_AVAILABILITY_ZONE:-<unset>}"
+  echo
+  echo "SSH access defaults:"
+  printf '  SSH_KEY_PATH=%s\n' "${SSH_KEY_PATH:-<unset>}"
+  printf '  KEY_NAME=%s\n' "${KEY_NAME:-<unset>}"
+  printf '  SECURITY_GROUP_NAME=%s\n' "${SECURITY_GROUP_NAME:-<unset>}"
+  printf '  SSH_PORT=%s\n' "${SSH_PORT:-<unset>}"
 }
