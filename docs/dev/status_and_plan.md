@@ -8,8 +8,8 @@ when returning to the repo.
 ## Current Repo Status
 
 The repo has completed Loop 1: Local Machine Setup, Loop 2: SSH Access Setup,
-Loop 3: EC2 Instance Lifecycle, and Loop 4: Persistent EBS Management. Loop 5:
-GitHub And Dotfile Persistence is active.
+Loop 3: EC2 Instance Lifecycle, Loop 4: Persistent EBS Management, and Loop 5:
+GitHub And Dotfile Persistence.
 
 Current stable files:
 
@@ -22,6 +22,8 @@ Current stable files:
 - `docs/ec2-instance-lifecycle.md`: EC2 launch, SSH config, status, and
   lifecycle workflow for Loop 3
 - `docs/persistent-ebs.md`: persistent scratch EBS workflow for Loop 4
+- `docs/github-and-dotfiles.md`: GitHub SSH key and dotfile persistence
+  workflow for Loop 5
 - `scripts/README.md`: overview of implemented script structure
 - `docs/dev/README.md`: development rules and loop process
 - `docs/dev/status_and_plan.md`: this cockpit file
@@ -36,25 +38,27 @@ command/API docs, Make targets, and scripts have been implemented and verified
 with the `takishiina` test profile. The AWS `EC2-GPU-Operator` permission set
 now enforces owner tags for key pairs, security groups, EC2 instance launch
 workflows, and persistent EBS workflows.
+Loop 5 GitHub And Dotfile Persistence docs, Make targets, and scripts have
+been implemented and verified by Xiran.
 
 ## Active Loop
 
 Active loop:
 
 ```text
-Loop 5: GitHub And Dotfile Persistence
+None
 ```
 
 Current state:
 
 ```text
-Design drafted; awaiting review
+No active loop. Ready to choose the next workflow area.
 ```
 
 Active loop docs:
 
 ```text
-docs/dev/loop/design.md
+None
 ```
 
 ## Completed Loops
@@ -64,6 +68,7 @@ docs/dev/archive/20260511-1-local-machine-setup
 docs/dev/archive/20260511-2-ssh-access-setup
 docs/dev/archive/20260512-3-ec2-instance-lifecycle
 docs/dev/archive/20260512-4-persistent-ebs-management
+docs/dev/archive/20260512-5-github-and-dotfiles
 ```
 
 Completed loops:
@@ -73,6 +78,7 @@ Loop 1: Local Machine Setup
 Loop 2: SSH Access Setup
 Loop 3: EC2 Instance Lifecycle
 Loop 4: Persistent EBS Management
+Loop 5: GitHub And Dotfile Persistence
 ```
 
 Implemented commands:
@@ -102,6 +108,8 @@ make create-volume VOLUME_NAME=scratch VOLUME_SIZE_GB=500
 make attach-volume VOLUME_ID=vol-... INSTANCE_NAME=dev
 make setup-scratch VOLUME_ID=vol-... CONFIRM_SETUP_SCRATCH=YES
 make mount-scratch VOLUME_ID=vol-...
+make save-dotfiles
+make restore-dotfiles
 ```
 
 ## Decisions So Far
@@ -160,6 +168,13 @@ make mount-scratch VOLUME_ID=vol-...
   `/dev/disk/by-id` using the EBS volume ID without dashes.
 - inside-instance scratch scripts reject devices with partitions or mounted
   children, which helps catch accidentally passing the root EBS volume ID.
+- Loop 5 keeps GitHub SSH-key generation manual. Users run
+  `ssh-keygen -t ed25519 -C "your_email@example.com"` and accept the default
+  `~/.ssh/id_ed25519` path.
+- Loop 5 persists selected dotfiles with plain copies under
+  `~/scratch/dotfiles`, not symlinks.
+- Loop 5 includes `~/.bashrc`, `~/.gitconfig`, `~/.texlive-env`,
+  `~/.ssh/id_ed25519`, and `~/.ssh/id_ed25519.pub`.
 
 ## Planned Workflow Areas
 
@@ -173,9 +188,9 @@ make mount-scratch VOLUME_ID=vol-...
 
 ## Short-Term Plan
 
-1. Review Loop 5 design.
-2. Resolve Loop 5 open questions.
-3. Draft user-facing docs and command/API docs before implementation.
+1. Choose the next workflow loop.
+2. Draft design docs in `docs/dev/loop/` before implementation.
+3. Keep user-facing docs and command/API docs in sync.
 
 Loop 1 was tested with:
 
@@ -213,10 +228,21 @@ Persistent scratch volume ID: vol-0cf90104842e28cd1
 Mount point: ~/scratch
 ```
 
-## Next Concrete Step
-
-Review Loop 5 design:
+Loop 5 was tested by Xiran inside an EC2 instance with mounted `~/scratch`.
+The successful commands were:
 
 ```text
-docs/dev/loop/design.md
+make save-dotfiles
+make restore-dotfiles
+```
+
+## Next Concrete Step
+
+Choose the next loop. Good candidates:
+
+```text
+Remote machine setup: micromamba, Node.js, Codex
+Status dashboards for EC2 instances, EBS volumes, and storage costs
+Cleanup and safety workflows
+S3 or data transfer workflows
 ```
