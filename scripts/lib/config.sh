@@ -43,7 +43,7 @@ require_config_vars() {
   fi
 }
 
-required_loop1_config_vars() {
+required_local_config_vars() {
   printf '%s\n' \
     OWNER \
     AWS_PROFILE \
@@ -56,7 +56,7 @@ required_loop1_config_vars() {
     AWS_SSO_SESSION
 }
 
-validate_loop1_config() {
+validate_local_config() {
   require_config_vars \
     OWNER \
     AWS_PROFILE \
@@ -81,8 +81,8 @@ validate_loop1_config() {
   fi
 }
 
-validate_loop2_config() {
-  validate_loop1_config
+validate_ssh_config() {
+  validate_local_config
   require_config_vars \
     SSH_KEY_PATH \
     KEY_NAME \
@@ -94,16 +94,16 @@ validate_loop2_config() {
   fi
 }
 
-validate_loop3_config() {
-  validate_loop2_config
+validate_ec2_config() {
+  validate_ssh_config
 
   if [[ ! "${DEFAULT_AVAILABILITY_ZONE:-}" =~ ^[a-z]{2}-[a-z]+-[0-9][a-z]$ ]]; then
     die "DEFAULT_AVAILABILITY_ZONE should look like us-east-1a."
   fi
 }
 
-validate_loop4_config() {
-  validate_loop3_config
+validate_ebs_config() {
+  validate_ec2_config
 }
 
 validate_instance_name() {

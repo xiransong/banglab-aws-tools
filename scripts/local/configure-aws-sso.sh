@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/config.sh"
 
 load_config
-validate_loop1_config
+validate_local_config
 
 if [[ -n "${AWS_CONFIG_FILE:-}" ]]; then
   AWS_DIR="$(dirname "${AWS_CONFIG_FILE}")"

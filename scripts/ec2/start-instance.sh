@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/aws.sh"
 
 load_config
-validate_loop3_config
+validate_ec2_config
 validate_instance_name
 
 instance_id="$(resolve_named_active_instance_id)"

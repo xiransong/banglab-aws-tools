@@ -90,8 +90,8 @@ This checks local configuration and required CLI tools.
 It also prints the same config summary, which is useful for catching mistakes
 before generating the AWS CLI profile.
 
-In this first loop, `make doctor` is intentionally simple. It should not log in
-to AWS, create AWS profiles, or provision AWS resources.
+`make doctor` is intentionally simple. It should not log in to AWS, create AWS
+profiles, or provision AWS resources.
 
 ## Step 4: Configure AWS CLI SSO Profile
 

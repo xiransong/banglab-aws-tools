@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/aws.sh"
 
 load_config
-validate_loop2_config
+validate_ssh_config
 
 if [[ ! -f "${SSH_KEY_PATH}.pub" ]]; then
   die "Public key not found: ${SSH_KEY_PATH}.pub. Run: make create-key"

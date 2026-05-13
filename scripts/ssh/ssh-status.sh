@@ -12,7 +12,7 @@ echo "banglab-aws-tools SSH status"
 echo "========================================"
 
 load_config
-validate_loop2_config
+validate_ssh_config
 
 echo
 echo "Local SSH key:"

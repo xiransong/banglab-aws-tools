@@ -17,7 +17,7 @@ load_config
 print_config_summary
 
 echo
-validate_loop1_config
+validate_local_config
 ok "config.env loaded and required variables are set"
 
 failures=0

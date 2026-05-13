@@ -60,7 +60,7 @@ ensure_bash_hook() {
 }
 
 echo "============================================================"
-echo "[INFO] Installing micromamba under persistent EBS"
+info "Installing micromamba under persistent EBS"
 echo "============================================================"
 
 require_scratch_mounted
@@ -100,9 +100,9 @@ export MAMBA_ROOT_PREFIX
 
 echo "============================================================"
 ok "micromamba is ready"
-printf '[INFO] Location: %s\n' "${MICROMAMBA_BIN}"
-printf '[INFO] Root prefix: %s\n' "${MAMBA_ROOT_PREFIX}"
-echo "[INFO] Next:"
+info "Location: ${MICROMAMBA_BIN}"
+info "Root prefix: ${MAMBA_ROOT_PREFIX}"
+info "Next:"
 echo "  source ~/.bashrc"
 echo "  make save-dotfiles"
 echo "============================================================"

@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/aws.sh"
 
 load_config
-validate_loop4_config
+validate_ebs_config
 
 info "Listing EBS volumes with Owner=${OWNER}"
 

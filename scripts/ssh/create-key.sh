@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/config.sh"
 
 load_config
-validate_loop2_config
+validate_ssh_config
 
 if [[ -e "${SSH_KEY_PATH}" || -e "${SSH_KEY_PATH}.pub" ]]; then
   die "SSH key already exists. Refusing to overwrite: ${SSH_KEY_PATH}"

@@ -8,12 +8,12 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/aws.sh"
 
 load_config
-validate_loop3_config
+validate_ec2_config
 validate_instance_name
 load_instance_config
 
 if ! vpc_id="$(get_default_vpc_id)"; then
-  die "No default VPC found in ${AWS_REGION}. Custom VPC support is out of scope for this loop."
+  die "No default VPC found in ${AWS_REGION}. Custom VPC support is not currently supported by this toolbox."
 fi
 
 if ! subnet_id="$(get_subnet_id_for_default_az "${vpc_id}")"; then

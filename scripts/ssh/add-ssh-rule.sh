@@ -8,7 +8,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/aws.sh"
 
 load_config
-validate_loop2_config
+validate_ssh_config
 require_config_vars SSH_RULE_NAME
 
 if [[ ! "${SSH_RULE_NAME}" =~ ^[A-Za-z0-9._-]+$ ]]; then
@@ -16,7 +16,7 @@ if [[ ! "${SSH_RULE_NAME}" =~ ^[A-Za-z0-9._-]+$ ]]; then
 fi
 
 if ! vpc_id="$(get_default_vpc_id)"; then
-  die "No default VPC found in ${AWS_REGION}. Custom VPC support is out of scope for this loop."
+  die "No default VPC found in ${AWS_REGION}. Custom VPC support is not currently supported by this toolbox."
 fi
 
 if ! security_group_exists "${vpc_id}"; then
