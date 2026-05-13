@@ -184,6 +184,44 @@ You should now see:
 - security group present
 - at least one SSH rule for your current location
 
+## AWS Console: Review SSH Resources
+
+The CLI is the recommended way to create or import SSH resources because it
+applies the expected `Owner` and `Name` tags.
+
+The AWS Console is useful for inspection. Open the AWS Console through the AWS
+Access Portal, select the BangLab account and `EC2-GPU-Operator` permission
+set, then set the region to:
+
+```text
+us-east-1
+```
+
+Go to **EC2 -> Key Pairs** to review your AWS key pair:
+
+```text
+<OWNER>-key
+```
+
+![AWS key pair](assets/images/aws-key-pair.png)
+
+Go to **EC2 -> Security Groups** to review your SSH security group:
+
+```text
+<OWNER>-ssh
+```
+
+Open the security group and check **Inbound rules** to see the current SSH
+rules. Each rule should allow TCP port `22` from a specific `/32` public IP
+address, with a description like:
+
+```text
+<OWNER>-home
+<OWNER>-lab
+```
+
+![Security group inbound SSH rules](assets/images/aws-security-group-inbound-rules.png)
+
 ## EC2 Workflows
 
 EC2 launch commands use:

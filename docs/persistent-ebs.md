@@ -73,6 +73,40 @@ volume 1:
   device: -
 ```
 
+## AWS Console: Review Volumes
+
+The CLI is the primary workflow for creating and attaching volumes. The AWS
+Console is useful for checking EBS state visually.
+
+Open the AWS Console through the AWS Access Portal, select the BangLab account
+and `EC2-GPU-Operator` permission set, then set the region to:
+
+```text
+us-east-1
+```
+
+Go to **EC2 -> Volumes**. Use the `Owner` and `Name` tags to identify your
+resources:
+
+```text
+Owner=<username>
+Name=<volume name>
+```
+
+For each volume, review:
+
+- volume ID
+- state
+- size
+- availability zone
+- attached instance
+- device name
+
+Root volumes belong to EC2 instances and are usually not the persistent scratch
+volume you want for daily work. Persistent scratch volumes are the volumes you
+created with `make create-volume`; use `make volumes` to retrieve their
+`VolumeId`.
+
 ## Step 2: Create A Persistent Volume
 
 Run from your local laptop:

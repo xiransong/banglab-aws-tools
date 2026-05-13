@@ -24,6 +24,18 @@ AWS resources are separated with Owner=<username> tags.
 - GitHub SSH key and dotfile persistence on EBS
 - micromamba installation on EBS
 
+## CLI And AWS Console
+
+This repo is both a toolbox and a workflow guide.
+
+Use the CLI commands for reproducible setup and tag-sensitive actions: AWS SSO
+profile setup, SSH key and security group setup, instance launch, EBS creation,
+and EBS attach/mount workflows.
+
+Use the AWS Console for quick review and simple manual operations: checking
+instance or volume status, copying an instance public IP address, inspecting
+tags, and stopping, starting, or terminating an owned instance.
+
 ## Quick Walkthrough
 
 Start with the user guide:

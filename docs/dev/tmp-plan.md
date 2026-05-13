@@ -30,13 +30,44 @@ of duplicating detailed EC2 workflows.
 
 ### 3. Add AWS Console Guidance
 
-- [ ] Add AWS Console guidance where helpful:
-      - check running instances
-      - check public IP
-      - check EBS volumes
-      - stop/start/terminate instances
-- [ ] Keep CLI as the primary reproducible workflow, but mention the Console as
-      a useful review interface.
+- [x] Add a repo-level framing section:
+      - `banglab-aws-tools` is a toolbox plus workflow guide
+      - CLI commands are best for reproducible setup and tag-sensitive actions
+      - AWS Console is best for review, inspection, and simple manual operations
+- [x] Create `docs/assets/images/`.
+- [x] Copy selected screenshots from `banglab-aws-docs/docs/assets/images/`:
+      - `aws-console.png`
+      - `aws-instance-ip-address.png`
+      - `aws-instance-state.png`
+      - `aws-key-pair.png`
+      - `aws-security-group-inbound-rules.png`
+- [x] Add only a small number of screenshots at first. Add more later if users
+      get stuck.
+- [x] Add AWS Console guidance to `docs/ec2-instance-lifecycle.md`:
+      - open AWS Console through AWS Access Portal
+      - select region `us-east-1`
+      - go to **EC2 -> Instances**
+      - review instance state
+      - copy public IPv4 address
+      - stop/start/terminate owned instances
+      - use tags `Owner=<username>` and `Name=<instance name>` to identify
+        resources
+- [x] Add AWS Console guidance to `docs/persistent-ebs.md`:
+      - go to **EC2 -> Volumes**
+      - review volume state
+      - review size and availability zone
+      - check attachment status
+      - distinguish root volumes from persistent scratch volumes
+      - use tags `Owner=<username>` and `Name=<volume name>` to identify
+        resources
+- [x] Add AWS Console guidance to `docs/ssh-access-setup.md`:
+      - go to **EC2 -> Key Pairs**
+      - go to **EC2 -> Security Groups**
+      - inspect inbound SSH rules
+      - explain that CLI remains the recommended way to create/import these
+        resources because it applies the expected tags
+- [x] Avoid turning the Console notes into a second full tutorial.
+- [x] Keep CLI as the primary reproducible workflow.
 
 ### 4. Doc Entry Point Cleanup
 

@@ -12,5 +12,11 @@ Recommended order:
 6. [GitHub And Dotfiles](github-and-dotfiles.md)
 7. [Micromamba Setup](micromamba-setup.md)
 
-The command-line workflow is the primary reference. The AWS Console can also be
-useful for reviewing instance and volume state.
+The command-line workflow is the primary reference. Use it for reproducible
+setup and actions where tags matter.
+
+The AWS Console is also useful for reviewing instance and volume state,
+copying public IP addresses, and doing simple manual operations on resources
+you own.
+
+![AWS Console](assets/images/aws-console.png)

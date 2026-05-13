@@ -92,6 +92,31 @@ instance 1:
 
 Terminated instance records disappear from AWS after some time.
 
+## AWS Console: Review Instances
+
+The CLI is the primary workflow, but the AWS Console is useful for checking
+state visually.
+
+Open the AWS Console through the AWS Access Portal, select the BangLab account
+and `EC2-GPU-Operator` permission set, then set the region to:
+
+```text
+us-east-1
+```
+
+Go to **EC2 -> Instances**. Use the `Owner` and `Name` tags to identify your
+resources:
+
+```text
+Owner=<username>
+Name=<instance name>
+```
+
+From the instance page, you can review the instance state, instance type,
+public IPv4 address, private IPv4 address, and launch time.
+
+![Instance public IP address](assets/images/aws-instance-ip-address.png)
+
 ## Step 2: Launch An Instance
 
 Launch requires an instance name and a recipe file:
@@ -200,6 +225,13 @@ Stopping pauses compute charges, but root EBS storage may still cost money.
 After starting a stopped instance, rerun `make configure-ssh` because the public
 IP may have changed. AWS may briefly keep reporting the instance as `stopped`
 right after a start request; the toolbox waits through that transition.
+
+You can also stop, start, reboot, or terminate an owned instance from the AWS
+Console by selecting the instance and using the **Instance state** menu. The CLI
+commands remain the recommended reference because they filter by owner tags and
+print the follow-up steps used by this toolbox.
+
+![Instance state menu](assets/images/aws-instance-state.png)
 
 ## Step 6: Terminate
 
