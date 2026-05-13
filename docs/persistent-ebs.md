@@ -180,6 +180,7 @@ Run this once per persistent EBS volume.
 For daily work, after the volume is attached and you SSH into the instance:
 
 ```bash
+git clone https://github.com/xiransong/banglab-aws-tools.git
 cd banglab-aws-tools
 make mount-scratch VOLUME_ID=vol-0123456789abcdef0
 cd ~/scratch
@@ -207,6 +208,7 @@ ssh ec2
 Inside the EC2 instance:
 
 ```bash
+git clone https://github.com/xiransong/banglab-aws-tools.git
 cd banglab-aws-tools
 make mount-scratch VOLUME_ID=vol-0123456789abcdef0
 cd ~/scratch
