@@ -23,10 +23,10 @@ of duplicating detailed EC2 workflows.
 
 ### 2. User-Facing Docs Cleanup
 
-- [ ] Treat everything outside `docs/dev` as user-facing.
-- [ ] Remove development wording such as "loop" from user-facing docs.
-- [ ] Make sure user-facing docs accurately reflect current supported features.
-- [ ] Remove or soften stale future-work claims such as S3 or Codex support.
+- [x] Treat everything outside `docs/dev` as user-facing.
+- [x] Remove development wording such as "loop" from user-facing docs.
+- [x] Make sure user-facing docs accurately reflect current supported features.
+- [x] Remove or soften stale future-work claims such as S3 or Codex support.
 
 ### 3. Add AWS Console Guidance
 
@@ -40,18 +40,18 @@ of duplicating detailed EC2 workflows.
 
 ### 4. Doc Entry Point Cleanup
 
-- [ ] Rewrite the repo-level `README.md` as the concise main walkthrough.
-- [ ] Make `docs/README.md` a clean user-guide index.
+- [x] Rewrite the repo-level `README.md` as the concise main walkthrough.
+- [x] Make `docs/README.md` a clean user-guide index.
 
 ### 5. Current Feature List To Reflect
 
-- [ ] Local machine setup
-- [ ] AWS SSO profile setup and identity verification
-- [ ] SSH key pair and security group setup
-- [ ] EC2 instance lifecycle
-- [ ] Persistent EBS creation, attach, setup, and mount
-- [ ] GitHub SSH key and dotfile persistence
-- [ ] Micromamba installation on persistent EBS
+- [x] Local machine setup
+- [x] AWS SSO profile setup and identity verification
+- [x] SSH key pair and security group setup
+- [x] EC2 instance lifecycle
+- [x] Persistent EBS creation, attach, setup, and mount
+- [x] GitHub SSH key and dotfile persistence
+- [x] Micromamba installation on persistent EBS
 
 ## `banglab-aws-docs`
 

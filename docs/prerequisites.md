@@ -68,7 +68,7 @@ curl --version
 jq --version
 ```
 
-These tools are used by local setup and later AWS workflow scripts.
+These tools are used by the local setup and AWS workflow scripts.
 
 ## 5. You Know Your BangLab Username
 
@@ -80,7 +80,7 @@ Example:
 Taki Shiina -> takishiina
 ```
 
-Later AWS resources should use this value:
+AWS resources should use this value:
 
 ```text
 Owner=takishiina

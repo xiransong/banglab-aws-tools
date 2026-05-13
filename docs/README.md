@@ -1,8 +1,8 @@
-# User Docs
+# User Guide
 
-User-facing documentation for `banglab-aws-tools` lives here.
+These pages walk through the supported `banglab-aws-tools` workflows.
 
-Start with:
+Recommended order:
 
 1. [Prerequisites](prerequisites.md)
 2. [Local Machine Setup](local-machine-setup.md)
@@ -11,3 +11,6 @@ Start with:
 5. [Persistent EBS](persistent-ebs.md)
 6. [GitHub And Dotfiles](github-and-dotfiles.md)
 7. [Micromamba Setup](micromamba-setup.md)
+
+The command-line workflow is the primary reference. The AWS Console can also be
+useful for reviewing instance and volume state.

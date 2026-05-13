@@ -189,15 +189,10 @@ Check that:
 not match `config.env`. This catches a common multi-user laptop mistake: using a
 profile named for one user while AWS CLI is still logged in as another user.
 
-## What This Setup Does Not Do
+## Next Step
 
-This page does not create AWS resources.
+This page does not create AWS resources. After local setup, continue to:
 
-Later workflows will handle:
-
-- SSH key pairs
-- security groups
-- persistent EBS volumes
-- EC2 instance launch
-- S3 workflows
-- optional GitHub, micromamba, Node.js, and Codex setup
+```text
+docs/ssh-access-setup.md
+```

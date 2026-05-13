@@ -1,6 +1,6 @@
 # SSH Access Setup
 
-This page prepares SSH access for future EC2 instances.
+This page prepares SSH access for EC2 instances.
 
 Before starting, complete local machine setup:
 
@@ -184,9 +184,9 @@ You should now see:
 - security group present
 - at least one SSH rule for your current location
 
-## Later EC2 Workflows
+## EC2 Workflows
 
-Future EC2 launch commands will use:
+EC2 launch commands use:
 
 ```text
 KEY_NAME=<OWNER>-key
@@ -212,6 +212,11 @@ This page does not:
 - launch EC2 instances
 - create EBS volumes
 - mount EBS volumes
-- set up GitHub, micromamba, Node.js, or Codex
 - delete key pairs or security groups
 - revoke old SSH rules
+
+For EC2 launch, continue to:
+
+```text
+docs/ec2-instance-lifecycle.md
+```
