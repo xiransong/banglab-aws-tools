@@ -9,7 +9,7 @@ when returning to the repo.
 
 The repo has completed Loop 1: Local Machine Setup, Loop 2: SSH Access Setup,
 Loop 3: EC2 Instance Lifecycle, Loop 4: Persistent EBS Management, and Loop 5:
-GitHub And Dotfile Persistence.
+GitHub And Dotfile Persistence. Loop 6: Micromamba Setup is active.
 
 Current stable files:
 
@@ -46,19 +46,19 @@ been implemented and verified by Xiran.
 Active loop:
 
 ```text
-None
+Loop 6: Micromamba Setup
 ```
 
 Current state:
 
 ```text
-No active loop. Ready to choose the next workflow area.
+Implemented; awaiting inside-instance verification
 ```
 
 Active loop docs:
 
 ```text
-None
+docs/dev/loop/design.md
 ```
 
 ## Completed Loops
@@ -188,9 +188,10 @@ make restore-dotfiles
 
 ## Short-Term Plan
 
-1. Choose the next workflow loop.
-2. Draft design docs in `docs/dev/loop/` before implementation.
-3. Keep user-facing docs and command/API docs in sync.
+1. Review Loop 6 implementation.
+2. Verify `make install-micromamba` inside an EC2 instance with mounted
+   `~/scratch`.
+3. Run `source ~/.bashrc`, `micromamba --version`, and `make save-dotfiles`.
 
 Loop 1 was tested with:
 
@@ -238,11 +239,11 @@ make restore-dotfiles
 
 ## Next Concrete Step
 
-Choose the next loop. Good candidates:
+Review and verify Loop 6:
 
 ```text
-Remote machine setup: micromamba, Node.js, Codex
-Status dashboards for EC2 instances, EBS volumes, and storage costs
-Cleanup and safety workflows
-S3 or data transfer workflows
+docs/dev/loop/design.md
+docs/dev/loop/api.md
+docs/micromamba-setup.md
+make install-micromamba
 ```

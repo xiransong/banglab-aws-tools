@@ -34,6 +34,7 @@ scripts/
 │   ├── create-volume.sh
 │   └── volumes.sh
 ├── remote/
+│   ├── install-micromamba.sh
 │   ├── mount-scratch.sh
 │   ├── restore-dotfiles.sh
 │   ├── save-dotfiles.sh

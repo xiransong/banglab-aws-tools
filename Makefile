@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: help init-config doctor configure-aws-sso aws-login aws-whoami ssh-status create-key import-key create-security-group add-ssh-rule instances launch-instance instance-status configure-ssh stop-instance start-instance reboot-instance terminate-instance volumes create-volume attach-volume setup-scratch mount-scratch save-dotfiles restore-dotfiles
+.PHONY: help init-config doctor configure-aws-sso aws-login aws-whoami ssh-status create-key import-key create-security-group add-ssh-rule instances launch-instance instance-status configure-ssh stop-instance start-instance reboot-instance terminate-instance volumes create-volume attach-volume setup-scratch mount-scratch save-dotfiles restore-dotfiles install-micromamba
 
 help: ## Show available commands
 	@awk 'BEGIN {FS = ":.*## "}; /^[a-zA-Z0-9_-]+:.*## / {printf "%-26s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -79,3 +79,6 @@ save-dotfiles: ## Inside EC2: save selected dotfiles to persistent EBS
 
 restore-dotfiles: ## Inside EC2: restore selected dotfiles from persistent EBS
 	@bash scripts/remote/restore-dotfiles.sh
+
+install-micromamba: ## Inside EC2: install micromamba under ~/scratch/micromamba
+	@bash scripts/remote/install-micromamba.sh
