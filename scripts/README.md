@@ -35,6 +35,8 @@ scripts/
 │   └── volumes.sh
 ├── remote/
 │   ├── mount-scratch.sh
+│   ├── restore-dotfiles.sh
+│   ├── save-dotfiles.sh
 │   ├── scratch-common.sh
 │   └── setup-scratch.sh
 └── ssh/

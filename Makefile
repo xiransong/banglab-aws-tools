@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: help init-config doctor configure-aws-sso aws-login aws-whoami ssh-status create-key import-key create-security-group add-ssh-rule instances launch-instance instance-status configure-ssh stop-instance start-instance reboot-instance terminate-instance volumes create-volume attach-volume setup-scratch mount-scratch
+.PHONY: help init-config doctor configure-aws-sso aws-login aws-whoami ssh-status create-key import-key create-security-group add-ssh-rule instances launch-instance instance-status configure-ssh stop-instance start-instance reboot-instance terminate-instance volumes create-volume attach-volume setup-scratch mount-scratch save-dotfiles restore-dotfiles
 
 help: ## Show available commands
 	@awk 'BEGIN {FS = ":.*## "}; /^[a-zA-Z0-9_-]+:.*## / {printf "%-26s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -73,3 +73,9 @@ setup-scratch: ## Inside EC2: format and mount a new scratch EBS volume
 
 mount-scratch: ## Inside EC2: mount an initialized scratch EBS volume
 	@VOLUME_ID="$(VOLUME_ID)" bash scripts/remote/mount-scratch.sh
+
+save-dotfiles: ## Inside EC2: save selected dotfiles to persistent EBS
+	@bash scripts/remote/save-dotfiles.sh
+
+restore-dotfiles: ## Inside EC2: restore selected dotfiles from persistent EBS
+	@bash scripts/remote/restore-dotfiles.sh

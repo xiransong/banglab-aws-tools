@@ -8,7 +8,8 @@ when returning to the repo.
 ## Current Repo Status
 
 The repo has completed Loop 1: Local Machine Setup, Loop 2: SSH Access Setup,
-Loop 3: EC2 Instance Lifecycle, and Loop 4: Persistent EBS Management.
+Loop 3: EC2 Instance Lifecycle, and Loop 4: Persistent EBS Management. Loop 5:
+GitHub And Dotfile Persistence is active.
 
 Current stable files:
 
@@ -41,19 +42,19 @@ workflows, and persistent EBS workflows.
 Active loop:
 
 ```text
-None
+Loop 5: GitHub And Dotfile Persistence
 ```
 
 Current state:
 
 ```text
-No active loop. Ready to choose the next workflow area.
+Design drafted; awaiting review
 ```
 
 Active loop docs:
 
 ```text
-None
+docs/dev/loop/design.md
 ```
 
 ## Completed Loops
@@ -172,9 +173,9 @@ make mount-scratch VOLUME_ID=vol-...
 
 ## Short-Term Plan
 
-1. Choose the next workflow loop.
-2. Draft design docs in `docs/dev/loop/` before implementation.
-3. Keep user-facing docs and command/API docs in sync.
+1. Review Loop 5 design.
+2. Resolve Loop 5 open questions.
+3. Draft user-facing docs and command/API docs before implementation.
 
 Loop 1 was tested with:
 
@@ -214,11 +215,8 @@ Mount point: ~/scratch
 
 ## Next Concrete Step
 
-Choose the next loop. Good candidates:
+Review Loop 5 design:
 
 ```text
-Remote machine setup: GitHub, micromamba, Node.js, Codex
-Status dashboards for EC2 instances, EBS volumes, and storage costs
-Cleanup and safety workflows
-S3 or data transfer workflows
+docs/dev/loop/design.md
 ```
