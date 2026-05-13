@@ -142,6 +142,12 @@ If you forget it later, run:
 make volumes
 ```
 
+## AWS Console: Review EBS Volume
+
+You can review your EBS volumes in AWS console:
+
+![Review EBS Volume](assets/images/aws-console-review-EBS.png)
+
 ## Step 3: Attach The Volume
 
 Launch or start an EC2 instance first:
@@ -250,10 +256,8 @@ cd ~/scratch
 
 ## Cost Reminder
 
-Persistent EBS volumes continue to cost money when:
+Persistent EBS volumes continue to cost money (around 8 dollars per month per 100GB) when:
 
 - the instance is stopped
 - the instance is terminated
 - the volume is not attached to any instance
-
-This is intentional: the volume persists so your data persists.

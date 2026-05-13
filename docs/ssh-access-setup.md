@@ -169,6 +169,8 @@ make add-ssh-rule SSH_RULE_NAME=lab
 This lets you keep separate rules for different places. The command should not
 remove old rules automatically.
 
+**Important**: The IP address of your place can be changing. If you find that you can't ssh to an instance due to the changed IP, review and update ssh rules with AWS Console and `make add-ssh-rule`. 
+
 ## Step 6: Check Status Again
 
 Run:
@@ -243,15 +245,7 @@ For Taki:
 ssh -i ~/.ssh/takishiina ubuntu@<PUBLIC_IP>
 ```
 
-## What This Setup Does Not Do
-
-This page does not:
-
-- launch EC2 instances
-- create EBS volumes
-- mount EBS volumes
-- delete key pairs or security groups
-- revoke old SSH rules
+---
 
 For EC2 launch, continue to:
 

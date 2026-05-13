@@ -10,6 +10,13 @@ docs/prerequisites.md
 
 ## Step 1: Create Local Config
 
+Clone this repo:
+
+```bash
+git clone https://github.com/xiransong/banglab-aws-tools.git
+cd banglab-aws-tools
+```
+
 From the repo root:
 
 ```bash
@@ -68,15 +75,15 @@ AWS_SSO_ROLE_NAME=EC2-GPU-Operator
 DEFAULT_AVAILABILITY_ZONE=us-east-1a
 ```
 
-Important:
+**Important**:
 
 - `OWNER` is your BangLab username and will be used for AWS resource ownership.
 - `AWS_PROFILE` is the local AWS CLI profile name.
 - `AWS_ACCOUNT_LABEL` is a human-readable account label.
 - `AWS_ACCOUNT_ID` is the 12-digit AWS account ID copied from AWS Access
   Portal.
-- `AWS_SSO_SESSION` is the local AWS CLI SSO cache name. Use a different value
-  for each AWS user on the same laptop, such as `banglab-takishiina`.
+- `AWS_SSO_SESSION` is the local AWS CLI SSO cache name. Use different values
+  for different AWS users on the same laptop, such as `banglab-takishiina`.
 
 ## Step 3: Check Local Readiness
 
