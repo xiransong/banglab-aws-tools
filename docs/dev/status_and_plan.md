@@ -8,8 +8,8 @@ when returning to the repo.
 ## Current Repo Status
 
 The repo has completed Loop 1: Local Machine Setup, Loop 2: SSH Access Setup,
-Loop 3: EC2 Instance Lifecycle, Loop 4: Persistent EBS Management, and Loop 5:
-GitHub And Dotfile Persistence. Loop 6: Micromamba Setup is active.
+Loop 3: EC2 Instance Lifecycle, Loop 4: Persistent EBS Management, Loop 5:
+GitHub And Dotfile Persistence, and Loop 6: Micromamba Setup.
 
 Current stable files:
 
@@ -24,6 +24,7 @@ Current stable files:
 - `docs/persistent-ebs.md`: persistent scratch EBS workflow for Loop 4
 - `docs/github-and-dotfiles.md`: GitHub SSH key and dotfile persistence
   workflow for Loop 5
+- `docs/micromamba-setup.md`: micromamba installation workflow for Loop 6
 - `scripts/README.md`: overview of implemented script structure
 - `docs/dev/README.md`: development rules and loop process
 - `docs/dev/status_and_plan.md`: this cockpit file
@@ -40,25 +41,27 @@ now enforces owner tags for key pairs, security groups, EC2 instance launch
 workflows, and persistent EBS workflows.
 Loop 5 GitHub And Dotfile Persistence docs, Make targets, and scripts have
 been implemented and verified by Xiran.
+Loop 6 Micromamba Setup docs, Make target, and script have been implemented and
+verified by Xiran.
 
 ## Active Loop
 
 Active loop:
 
 ```text
-Loop 6: Micromamba Setup
+None
 ```
 
 Current state:
 
 ```text
-Implemented; awaiting inside-instance verification
+No active loop. Ready to choose the next workflow area.
 ```
 
 Active loop docs:
 
 ```text
-docs/dev/loop/design.md
+None
 ```
 
 ## Completed Loops
@@ -69,6 +72,7 @@ docs/dev/archive/20260511-2-ssh-access-setup
 docs/dev/archive/20260512-3-ec2-instance-lifecycle
 docs/dev/archive/20260512-4-persistent-ebs-management
 docs/dev/archive/20260512-5-github-and-dotfiles
+docs/dev/archive/20260512-6-micromamba-setup
 ```
 
 Completed loops:
@@ -79,6 +83,7 @@ Loop 2: SSH Access Setup
 Loop 3: EC2 Instance Lifecycle
 Loop 4: Persistent EBS Management
 Loop 5: GitHub And Dotfile Persistence
+Loop 6: Micromamba Setup
 ```
 
 Implemented commands:
@@ -110,6 +115,7 @@ make setup-scratch VOLUME_ID=vol-... CONFIRM_SETUP_SCRATCH=YES
 make mount-scratch VOLUME_ID=vol-...
 make save-dotfiles
 make restore-dotfiles
+make install-micromamba
 ```
 
 ## Decisions So Far
@@ -175,6 +181,11 @@ make restore-dotfiles
   `~/scratch/dotfiles`, not symlinks.
 - Loop 5 includes `~/.bashrc`, `~/.gitconfig`, `~/.texlive-env`,
   `~/.ssh/id_ed25519`, and `~/.ssh/id_ed25519.pub`.
+- Loop 6 installs micromamba under `~/scratch/micromamba`.
+- Loop 6 uses the official latest Linux x86_64 micromamba tarball.
+- Loop 6 appends an idempotent micromamba bash hook to `~/.bashrc`.
+- After Loop 6 installation, users should run `source ~/.bashrc` and
+  `make save-dotfiles`.
 
 ## Planned Workflow Areas
 
@@ -188,10 +199,9 @@ make restore-dotfiles
 
 ## Short-Term Plan
 
-1. Review Loop 6 implementation.
-2. Verify `make install-micromamba` inside an EC2 instance with mounted
-   `~/scratch`.
-3. Run `source ~/.bashrc`, `micromamba --version`, and `make save-dotfiles`.
+1. Choose the next workflow loop.
+2. Draft design docs in `docs/dev/loop/` before implementation.
+3. Keep user-facing docs and command/API docs in sync.
 
 Loop 1 was tested with:
 
@@ -237,13 +247,20 @@ make save-dotfiles
 make restore-dotfiles
 ```
 
-## Next Concrete Step
-
-Review and verify Loop 6:
+Loop 6 was tested by Xiran inside an EC2 instance with mounted `~/scratch`.
+The successful command was:
 
 ```text
-docs/dev/loop/design.md
-docs/dev/loop/api.md
-docs/micromamba-setup.md
 make install-micromamba
+```
+
+## Next Concrete Step
+
+Choose the next loop. Good candidates:
+
+```text
+Remote machine setup: Node.js, Codex
+Status dashboards for EC2 instances, EBS volumes, and storage costs
+Cleanup and safety workflows
+S3 or data transfer workflows
 ```

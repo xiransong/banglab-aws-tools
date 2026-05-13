@@ -238,6 +238,6 @@ This loop is done when:
 6. Implement remote micromamba script: done
    - `scripts/remote/install-micromamba.sh`
 
-7. Verify inside an EC2 instance with mounted `~/scratch`
+7. Verify inside an EC2 instance with mounted `~/scratch`: done
 
 8. Close and archive Loop 6
