@@ -183,6 +183,28 @@ get_instance_state() {
     --output text
 }
 
+try_get_instance_state() {
+  local instance_id="$1"
+  local output
+
+  if output="$(
+    aws_ec2 describe-instances \
+      --instance-ids "${instance_id}" \
+      --query 'Reservations[0].Instances[0].State.Name' \
+      --output text 2>&1
+  )"; then
+    printf '%s\n' "${output}"
+    return 0
+  fi
+
+  if [[ "${output}" == *"InvalidInstanceID.NotFound"* ]]; then
+    return 2
+  fi
+
+  printf '%s\n' "${output}" >&2
+  return 1
+}
+
 get_instance_public_ip() {
   local instance_id="$1"
 

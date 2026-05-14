@@ -75,7 +75,17 @@ attempts=0
 max_attempts=60
 
 while true; do
-  state="$(get_instance_state "${instance_id}")"
+  if state="$(try_get_instance_state "${instance_id}")"; then
+    :
+  else
+    status=$?
+    if [[ "${status}" == "2" ]]; then
+      state="not-yet-visible"
+    else
+      exit "${status}"
+    fi
+  fi
+
   if [[ "${state}" == "running" ]]; then
     break
   fi
