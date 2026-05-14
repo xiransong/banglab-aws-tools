@@ -9,7 +9,7 @@ list -> launch -> configure SSH -> use -> stop/start/reboot -> terminate
 This workflow manages EC2 instances and their root EBS volumes. It does not
 create or manage separate persistent research EBS volumes.
 
-Before starting, complete:
+Before starting, make sure you have completed these in the previous sections:
 
 ```bash
 make doctor
