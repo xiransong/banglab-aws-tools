@@ -65,7 +65,4 @@ else
     printf '  - %s\n' "${item}"
   done
 fi
-echo
-echo "Next steps:"
-echo "  source ~/.bashrc"
 echo "========================================"

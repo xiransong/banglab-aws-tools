@@ -38,4 +38,3 @@ aws_ec2 wait volume-available --volume-ids "${volume_id}"
 
 ok "Volume is available: ${volume_id}"
 info "This VolumeId is needed for daily workflow: ${volume_id}. You can retrieve it with: make volumes"
-info "Next: make attach-volume VOLUME_ID=${volume_id} INSTANCE_NAME=dev"

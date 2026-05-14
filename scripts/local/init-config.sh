@@ -46,4 +46,3 @@ echo "AWS_SSO_SESSION is usually banglab-\${OWNER}."
 echo "You can copy AWS_ACCOUNT_ID from the AWS Access Portal."
 echo "========================================"
 echo
-info "Then run: make doctor"

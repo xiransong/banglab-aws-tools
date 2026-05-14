@@ -32,7 +32,6 @@ check_command jq || failures=1
 echo
 if [[ "${failures}" -eq 0 ]]; then
   ok "Local machine setup checks passed."
-  info "Next: make configure-aws-sso"
 else
   die "One or more local machine setup checks failed."
 fi

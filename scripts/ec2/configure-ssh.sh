@@ -92,6 +92,3 @@ fi
 ok "Updated SSH config: ${ssh_config}"
 info "Host: ${SSH_HOST}"
 info "HostName: ${public_ip}"
-info "Next: ssh ${SSH_HOST}"
-info "You can also use ${SSH_HOST} in VS Code Remote SSH."
-info "If SSH says connection refused, wait 30-60 seconds and retry."

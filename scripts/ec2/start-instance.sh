@@ -41,5 +41,3 @@ public_ip="$(get_instance_public_ip "${instance_id}")"
 
 ok "Instance is running: ${INSTANCE_NAME} (${instance_id})"
 info "Public IP: ${public_ip:-<missing>}"
-info "Refresh SSH config: make configure-ssh INSTANCE_NAME=${INSTANCE_NAME}"
-info "SSH may take another 30-60 seconds to become ready."

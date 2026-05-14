@@ -69,4 +69,3 @@ trap - EXIT
 ok "Updated AWS CLI config: ${AWS_CONFIG_FILE}"
 info "Backup saved at: ${backup}"
 info "Configured profile: ${AWS_PROFILE}"
-info "Next: make aws-login"

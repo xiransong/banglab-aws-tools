@@ -108,7 +108,3 @@ if [[ -n "${public_ip}" ]]; then
 else
   warn "No public IP found yet. Try: make instance-status INSTANCE_NAME=${INSTANCE_NAME}"
 fi
-
-info "Next: make configure-ssh INSTANCE_NAME=${INSTANCE_NAME}"
-info "Then: ssh ec2"
-info "If SSH says connection refused, wait 30-60 seconds and retry."

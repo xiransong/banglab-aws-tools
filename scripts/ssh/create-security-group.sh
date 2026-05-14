@@ -33,4 +33,3 @@ group_id="$(
 
 ok "Created security group: ${SECURITY_GROUP_NAME} (${group_id})"
 info "Tags: Owner=${OWNER}, Name=${SECURITY_GROUP_NAME}"
-info "Next: make add-ssh-rule SSH_RULE_NAME=home"

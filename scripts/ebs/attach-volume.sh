@@ -68,8 +68,3 @@ while true; do
 done
 
 ok "Volume attached: ${VOLUME_ID}"
-info "Next: ssh ec2"
-info "Then, inside the instance:"
-info "  make setup-scratch VOLUME_ID=${VOLUME_ID} CONFIRM_SETUP_SCRATCH=YES"
-info "or, if already initialized:"
-info "  make mount-scratch VOLUME_ID=${VOLUME_ID}"

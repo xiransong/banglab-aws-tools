@@ -30,4 +30,3 @@ ensure_scratch_owned_by_user
 mkdir -p "${SCRATCH_MOUNT}"/{repos,data,outputs,transfer}
 
 ok "Scratch volume mounted: ${SCRATCH_MOUNT}"
-info "Next: cd ${SCRATCH_MOUNT}"
