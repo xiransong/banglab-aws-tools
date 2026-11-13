@@ -39,7 +39,7 @@ instances: ## List EC2 instances owned by the configured user
 	@bash scripts/ec2/instances.sh
 
 launch-instance: ## Launch an EC2 instance, e.g. make launch-instance INSTANCE_NAME=dev INSTANCE_CONFIG=instances/m7i-flex-xlarge.env
-	@INSTANCE_NAME="$(INSTANCE_NAME)" INSTANCE_CONFIG="$(INSTANCE_CONFIG)" AMI_ID="$(AMI_ID)" INSTANCE_TYPE="$(INSTANCE_TYPE)" ROOT_VOLUME_SIZE_GB="$(ROOT_VOLUME_SIZE_GB)" bash scripts/ec2/launch-instance.sh
+	@INSTANCE_NAME="$(INSTANCE_NAME)" INSTANCE_CONFIG="$(INSTANCE_CONFIG)" AMI_ID="$(AMI_ID)" INSTANCE_TYPE="$(INSTANCE_TYPE)" ROOT_VOLUME_SIZE_GB="$(ROOT_VOLUME_SIZE_GB)" RETRY_CAPACITY="$(RETRY_CAPACITY)" RETRY_INTERVAL_SECONDS="$(RETRY_INTERVAL_SECONDS)" bash scripts/ec2/launch-instance.sh
 
 instance-status: ## Show EC2 instance status, e.g. make instance-status INSTANCE_NAME=dev
 	@INSTANCE_NAME="$(INSTANCE_NAME)" bash scripts/ec2/instance-status.sh

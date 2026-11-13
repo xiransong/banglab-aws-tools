@@ -12,6 +12,11 @@ validate_ec2_config
 validate_instance_name
 load_instance_config
 
+RETRY_CAPACITY="${RETRY_CAPACITY:-0}"
+RETRY_INTERVAL_SECONDS="${RETRY_INTERVAL_SECONDS:-60}"
+[[ "${RETRY_CAPACITY}" == "0" || "${RETRY_CAPACITY}" == "1" ]] || die "RETRY_CAPACITY must be 0 or 1."
+[[ "${RETRY_INTERVAL_SECONDS}" =~ ^[1-9][0-9]*$ ]] || die "RETRY_INTERVAL_SECONDS must be a positive integer."
+
 if ! vpc_id="$(get_default_vpc_id)"; then
   die "No default VPC found in ${AWS_REGION}. Custom VPC support is not currently supported by this toolbox."
 fi
@@ -52,8 +57,14 @@ printf '  INSTANCE_TYPE=%s\n' "${INSTANCE_TYPE}"
 printf '  ROOT_VOLUME_SIZE_GB=%s\n' "${ROOT_VOLUME_SIZE_GB}"
 printf '  AvailabilityZone=%s\n' "${DEFAULT_AVAILABILITY_ZONE}"
 
-instance_id="$(
+client_token="$(uuidgen)"
+error_file="$(mktemp)"
+trap 'rm -f "${error_file}"' EXIT
+
+while true; do
+  if instance_id="$(
   aws_ec2 run-instances \
+    --client-token "${client_token}" \
     --image-id "${AMI_ID}" \
     --instance-type "${INSTANCE_TYPE}" \
     --key-name "${KEY_NAME}" \
@@ -65,8 +76,19 @@ instance_id="$(
       "ResourceType=volume,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${INSTANCE_NAME}-root}]" \
     --count 1 \
     --query 'Instances[0].InstanceId' \
-    --output text
-)"
+    --output text 2>"${error_file}"
+  )"; then
+    break
+  else
+    status=$?
+  fi
+  cat "${error_file}" >&2
+  if [[ "${RETRY_CAPACITY}" != "1" ]] || ! grep -q 'An error occurred (InsufficientInstanceCapacity)' "${error_file}"; then
+    exit "${status}"
+  fi
+  warn "Insufficient capacity. Retrying in ${RETRY_INTERVAL_SECONDS} seconds; press Ctrl-C to stop."
+  sleep "${RETRY_INTERVAL_SECONDS}"
+done
 
 ok "Launch accepted: ${instance_id}"
 info "Waiting for instance to reach running..."

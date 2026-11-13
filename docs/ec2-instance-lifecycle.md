@@ -125,6 +125,21 @@ Launch requires an instance name and a recipe file:
 make launch-instance INSTANCE_NAME=dev INSTANCE_CONFIG=instances/m7i-flex-xlarge.env
 ```
 
+For scarce capacity, opt in to retrying until EC2 accepts the request:
+
+```bash
+make launch-instance INSTANCE_NAME=gpu INSTANCE_CONFIG=instances/g6.2xlarge.env RETRY_CAPACITY=1 RETRY_INTERVAL_SECONDS=60
+```
+
+The interval defaults to 60 seconds. The command runs in the foreground; press
+Ctrl-C to stop. Only `InsufficientInstanceCapacity` is retried; credentials,
+quota, configuration, and other errors stop the command. Each attempt uses the
+same EC2 client token to prevent duplicate launches within this invocation.
+If the command is interrupted or fails after an ambiguous response, check AWS
+for an instance before starting it again. Do not run concurrent launches with
+the same name. Once accepted, normal waiting for `running` applies; a later
+instance failure is not retried. A successful launch incurs AWS charges.
+
 The toolbox launches the instance with:
 
 ```text
