@@ -51,7 +51,7 @@ stop-instance: ## Stop an EC2 instance, e.g. make stop-instance INSTANCE_NAME=de
 	@INSTANCE_NAME="$(INSTANCE_NAME)" bash scripts/ec2/stop-instance.sh
 
 start-instance: ## Start an EC2 instance, e.g. make start-instance INSTANCE_NAME=dev
-	@INSTANCE_NAME="$(INSTANCE_NAME)" bash scripts/ec2/start-instance.sh
+	@INSTANCE_NAME="$(INSTANCE_NAME)" RETRY_CAPACITY="$(RETRY_CAPACITY)" RETRY_INTERVAL_SECONDS="$(RETRY_INTERVAL_SECONDS)" bash scripts/ec2/start-instance.sh
 
 reboot-instance: ## Reboot a running EC2 instance, e.g. make reboot-instance INSTANCE_NAME=dev
 	@INSTANCE_NAME="$(INSTANCE_NAME)" bash scripts/ec2/reboot-instance.sh

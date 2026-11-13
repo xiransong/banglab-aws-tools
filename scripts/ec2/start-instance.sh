@@ -11,9 +11,28 @@ load_config
 validate_ec2_config
 validate_instance_name
 
-instance_id="$(resolve_named_active_instance_id)"
+RETRY_CAPACITY="${RETRY_CAPACITY:-0}"
+RETRY_INTERVAL_SECONDS="${RETRY_INTERVAL_SECONDS:-30}"
+[[ "${RETRY_CAPACITY}" == "0" || "${RETRY_CAPACITY}" == "1" ]] || die "RETRY_CAPACITY must be 0 or 1."
+[[ "${RETRY_INTERVAL_SECONDS}" =~ ^[1-9][0-9]*$ ]] || die "RETRY_INTERVAL_SECONDS must be a positive integer."
 
-aws_ec2 start-instances --instance-ids "${instance_id}" >/dev/null
+instance_id="$(resolve_named_active_instance_id)"
+error_file="$(mktemp)"
+trap 'rm -f "${error_file}"' EXIT
+
+while true; do
+  if aws_ec2 start-instances --instance-ids "${instance_id}" >/dev/null 2>"${error_file}"; then
+    break
+  else
+    status=$?
+  fi
+  cat "${error_file}" >&2
+  if [[ "${RETRY_CAPACITY}" != "1" ]] || ! grep -q 'An error occurred (InsufficientInstanceCapacity)' "${error_file}"; then
+    exit "${status}"
+  fi
+  warn "Insufficient capacity. Retrying in ${RETRY_INTERVAL_SECONDS} seconds; press Ctrl-C to stop."
+  sleep "${RETRY_INTERVAL_SECONDS}"
+done
 
 ok "Start requested: ${INSTANCE_NAME} (${instance_id})"
 info "Waiting for instance to reach running..."

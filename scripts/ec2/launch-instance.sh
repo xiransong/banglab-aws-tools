@@ -13,7 +13,7 @@ validate_instance_name
 load_instance_config
 
 RETRY_CAPACITY="${RETRY_CAPACITY:-0}"
-RETRY_INTERVAL_SECONDS="${RETRY_INTERVAL_SECONDS:-60}"
+RETRY_INTERVAL_SECONDS="${RETRY_INTERVAL_SECONDS:-30}"
 [[ "${RETRY_CAPACITY}" == "0" || "${RETRY_CAPACITY}" == "1" ]] || die "RETRY_CAPACITY must be 0 or 1."
 [[ "${RETRY_INTERVAL_SECONDS}" =~ ^[1-9][0-9]*$ ]] || die "RETRY_INTERVAL_SECONDS must be a positive integer."
 

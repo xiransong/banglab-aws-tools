@@ -128,10 +128,10 @@ make launch-instance INSTANCE_NAME=dev INSTANCE_CONFIG=instances/m7i-flex-xlarge
 For scarce capacity, opt in to retrying until EC2 accepts the request:
 
 ```bash
-make launch-instance INSTANCE_NAME=gpu INSTANCE_CONFIG=instances/g6.2xlarge.env RETRY_CAPACITY=1 RETRY_INTERVAL_SECONDS=60
+make launch-instance INSTANCE_NAME=gpu INSTANCE_CONFIG=instances/g6.2xlarge.env RETRY_CAPACITY=1 RETRY_INTERVAL_SECONDS=30
 ```
 
-The interval defaults to 60 seconds. The command runs in the foreground; press
+The interval defaults to 30 seconds. The command runs in the foreground; press
 Ctrl-C to stop. Only `InsufficientInstanceCapacity` is retried; credentials,
 quota, configuration, and other errors stop the command. Each attempt uses the
 same EC2 client token to prevent duplicate launches within this invocation.
@@ -229,6 +229,18 @@ Start it again:
 ```bash
 make start-instance INSTANCE_NAME=dev
 ```
+
+To retry a start when EC2 reports insufficient capacity, use:
+
+```bash
+make start-instance INSTANCE_NAME=dev RETRY_CAPACITY=1 RETRY_INTERVAL_SECONDS=30
+```
+
+The interval defaults to 30 seconds. The command runs in the foreground until
+the start request succeeds; press Ctrl-C to stop. Only
+`InsufficientInstanceCapacity` is retried. Other errors stop the command.
+After EC2 accepts the request, the command waits for the instance to reach
+`running`. Starting an instance incurs AWS charges.
 
 Reboot it:
 
